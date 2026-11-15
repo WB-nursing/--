@@ -1,0 +1,2248 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<title>Strategies Midterm 👶 | The Coding Nurse(Ŵ)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+:root[data-theme="light"] {
+  --primary: #0f4c81;
+  --secondary: #0ea5e9;
+  --success: #22c55e;
+  --danger: #dc2626;
+  --bg: #f1f5f9;
+  --card-bg: #ffffff;
+  --soft: #f8fafc;
+  --text: #0f172a;
+  --border: #e5e7eb;
+  --shadow: rgba(0,0,0,.06);
+}
+:root[data-theme="dark"] {
+  --primary: #38bdf8;
+  --secondary: #0ea5e9;
+  --success: #4ade80;
+  --danger: #f87171;
+  --bg: #0f172a;
+  --card-bg: #1e293b;
+  --soft: #0f172a;
+  --text: #f8fafc;
+  --border: #334155;
+  --shadow: rgba(0,0,0,.3);
+}
+
+*{box-sizing:border-box; font-family:"Segoe UI", system-ui, sans-serif; transition: background 0.3s, color 0.3s;}
+body{margin:0; background:var(--bg); color:var(--text); padding-bottom: 90px;}
+.container{max-width:1000px; margin:auto; padding:16px; position: relative;}
+
+.top-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin-top: -36px;
+  margin-bottom: 26px;
+  position: relative;
+  z-index: 10;
+  width: 100%;
+}
+
+.settings-bar {
+  display: flex;
+  gap: 6px;
+}
+
+.setting-btn, .theme-toggle {
+  background: var(--card-bg);
+  border: 2px solid var(--border);
+  padding: 8px 12px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-weight: bold;
+  color: var(--text);
+  box-shadow: 0 4px 12px var(--shadow);
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+@keyframes popIn {
+  0% { transform: scale(0.95); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+.shake-anim { animation: shake 0.3s ease-in-out; }
+
+.hero{
+  text-align:center;
+  padding:40px 20px 50px 20px;
+  border-radius:24px;
+  background: linear-gradient(135deg, #0f4c81, #0ea5e9);
+  color:#fff;
+  margin-bottom: 20px;
+  animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 10px 25px rgba(15, 76, 129, 0.2);
+}
+.hero h1{margin:0; font-size:36px; font-weight:800}
+.hero h2{ margin-top:6px; font-size:18px; letter-spacing:2px; text-transform:uppercase; color:#bbf7d0;}
+.hero p { margin-top: 10px; font-size: 16px; font-weight: 600; color: #e2e8f0; }
+
+.mid-nav{ display:flex; gap:10px; margin:24px 0; padding:6px 4px; overflow-x:auto;}
+.q-btn{
+  min-width:44px; padding:10px 0; border-radius:12px; border:2px solid var(--border);
+  background:var(--card-bg); color: var(--text); font-weight:700; cursor:pointer; transition: all 0.2s ease;
+}
+.q-btn.active{background:#dbeafe; border-color:var(--secondary); color:#0f4c81; transform: scale(1.1); box-shadow: 0 4px 10px rgba(14, 165, 233, 0.2);}
+.q-btn.correct{background:#dcfce7 !important; border-color:var(--success) !important; color: #16a34a !important;}
+.q-btn.wrong{background:#fee2e2 !important; border-color:var(--danger) !important; color: #dc2626 !important;}
+.q-btn.flagged{border-color: #f59e0b !important; background: #fef3c7 !important; color: #b45309 !important;}
+.q-btn.answered-exam { background: #e2e8f0; border-color: #94a3b8; color: #475569; }
+
+.card{
+  background:var(--card-bg); border-radius:22px; padding:28px;
+  box-shadow:0 14px 35px var(--shadow); text-align: center;
+  animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  border: 1px solid var(--border);
+}
+
+.welcome-msg { font-size: 24px; color: var(--primary); font-weight: 700; margin-bottom: 20px; }
+.mode-selector {
+  margin: 20px 0 25px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+.mode-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--soft);
+  padding: 14px 20px;
+  border-radius: 14px;
+  border: 2px solid var(--border);
+  cursor: pointer;
+  width: 100%;
+  max-width: 450px;
+  text-align: right;
+  direction: rtl;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+.mode-option input { scale: 1.3; cursor: pointer; margin-left: 10px; }
+.mode-option:hover { border-color: var(--secondary); }
+.mode-option:has(input:checked) {
+  border-color: var(--secondary);
+  background: rgba(14, 165, 233, 0.08);
+}
+.start-btn {
+  padding: 16px 50px; font-size: 18px; font-weight: 700; color: #fff;
+  background: linear-gradient(135deg, var(--success), #16a34a); border: none; border-radius: 16px;
+  cursor: pointer; transition: all 0.2s ease; width: 100%; max-width: 450px;
+}
+.start-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(34, 197, 94, 0.35); }
+
+.resume-btn {
+  padding: 14px 30px; font-size: 16px; font-weight: 700; color: var(--primary);
+  background: transparent; border: 2px solid var(--primary); border-radius: 16px;
+  cursor: pointer; transition: all 0.2s ease; display: none; margin-top: 5px; width: 100%; max-width: 450px;
+}
+.resume-btn:hover { background: var(--primary); color: #fff; }
+
+.timer-box {
+  display: none;
+  background: var(--card-bg);
+  border: 2px solid var(--border);
+  padding: 8px 20px;
+  border-radius: 50px;
+  font-weight: 800;
+  color: var(--danger);
+  box-shadow: 0 4px 12px var(--shadow);
+  text-align: center;
+  margin: 10px auto 20px auto;
+  width: fit-content;
+  font-size: 18px;
+  letter-spacing: 1px;
+}
+
+.progress-container { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-weight: 700; font-size: 14px; color: var(--muted); }
+.progress{ height:10px; background:var(--border); border-radius:999px; overflow:hidden; margin-bottom:18px;}
+.progress span{
+  display:block; height:100%; width:0%;
+  background:linear-gradient(90deg, var(--secondary), var(--success));
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.question-box{
+  background: var(--soft);
+  border-left:6px solid var(--secondary); border-radius:18px; padding:22px; text-align: left;
+}
+
+.q-tools-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed var(--border);
+}
+.q-badge {
+  background: var(--primary);
+  color: #fff;
+  padding: 4px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: bold;
+}
+.q-actions {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.question { font-size:19px; font-weight:600; line-height: 1.5; width: 100%; display: block; word-wrap: break-word; }
+
+#speakBtn, #stopSpeakBtn, #translateBtn { background: none; border: none; font-size: 20px; cursor: pointer; padding: 0; line-height: 1; transition: transform 0.2s; }
+#speakBtn:hover, #stopSpeakBtn:hover, #translateBtn:hover { transform: scale(1.2); }
+
+#flagBtn { background: none; border: none; font-size: 22px; cursor: pointer; padding: 0; line-height: 1; transition: transform 0.2s; filter: grayscale(1); }
+#flagBtn:hover { transform: scale(1.2); }
+#flagBtn.active { filter: grayscale(0) drop-shadow(0 0 4px #f59e0b) !important; transform: scale(1.1); }
+
+.translation-box {
+  display: none;
+  margin-top: 18px;
+  padding: 16px;
+  background: var(--card-bg);
+  border-right: 4px solid var(--secondary);
+  border-radius: 12px;
+  direction: rtl;
+  text-align: right;
+  box-shadow: inset 0 2px 6px var(--shadow), 0 2px 8px var(--shadow);
+  animation: popIn 0.3s ease;
+}
+.trans-title { font-weight: bold; color: var(--secondary); margin-bottom: 8px; font-size: 14px; }
+.trans-q { font-size: 16px; font-weight: 600; margin-bottom: 12px; line-height: 1.5; color: var(--text); }
+.trans-o-list { margin: 0; padding-right: 20px; font-size: 15px; color: #475569; line-height: 1.7; }
+
+.options button{
+  width:100%; padding:16px; margin-bottom:12px; border-radius:14px;
+  border:2px solid var(--border); background:var(--card-bg); color: var(--text);
+  font-size:16px; text-align: left; cursor:pointer; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.options button:not(:disabled):hover {
+  transform: translateY(-2px); border-color: var(--secondary);
+  box-shadow: 0 6px 16px rgba(14, 165, 233, 0.15);
+}
+.options button.correct{background:#ecfdf5 !important; border-color:var(--success) !important; color: #065f46 !important; font-weight: 700;}
+.options button.wrong{background:#fef2f2 !important; border-color:var(--danger) !important; color: #991b1b !important; font-weight: 700;}
+.options button.selected-exam { background: #e0f2fe !important; border-color: var(--secondary) !important; color: #0369a1 !important; font-weight: 700; }
+
+/* Sticky Bottom Navigation */
+.sticky-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: color-mix(in srgb, var(--bg) 90%, transparent);
+  backdrop-filter: blur(10px);
+  padding: 12px 16px;
+  box-shadow: 0 -4px 15px var(--shadow);
+  z-index: 100;
+  display: none; /* Hidden until quiz starts */
+  border-top: 1px solid var(--border);
+}
+.sticky-nav-inner {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  gap: 10px;
+}
+.nav button{
+  flex:1; padding:14px; border-radius:14px; font-size:15px; font-weight:700; cursor:pointer; transition: all 0.2s;
+}
+.prev{background:var(--card-bg); border:2px solid var(--border); color: var(--text);}
+.prev:hover{background: var(--soft); transform: translateY(-1px);}
+.next{ border:none; color:#fff; background:linear-gradient(135deg,var(--primary),var(--secondary));}
+.next:hover{opacity: 0.95; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(15, 76, 129, 0.2);}
+
+.extra-nav { display: flex; gap: 12px; margin-top: 12px; }
+.extra-nav button { flex: 1; padding: 12px; border-radius: 14px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+.home-btn { background: var(--card-bg); border: 2px solid var(--border); color: var(--text); }
+.home-btn:hover { background: var(--soft); transform: translateY(-1px); }
+.finish-btn { background: linear-gradient(135deg, var(--danger), #b91c1c); border: none; color: #fff; }
+.finish-btn:hover { opacity: 0.95; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2); }
+
+.result-msg { font-size: 18px; margin-bottom: 10px; line-height: 1.6; }
+.duck-msg { display: block; margin-top: 15px; font-weight: 800; color: var(--primary); font-size: 20px;}
+.stats-container {
+  display: flex; justify-content: space-around; background: var(--soft);
+  padding: 16px; border-radius: 16px; margin: 20px 0; border: 1px solid var(--border);
+}
+.stat-box { text-align: center; }
+.stat-val { font-size: 24px; font-weight: 800; }
+.stat-lbl { font-size: 13px; color: #64748b; margin-top: 4px; }
+.score{ font-size:48px; font-weight:900; color:var(--success); margin: 10px 0; text-shadow: 0 4px 12px rgba(34, 197, 94, 0.2);}
+.badge-title { font-size: 22px; font-weight: 800; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+.result-actions-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 400px;
+  margin: 20px auto 0 auto;
+}
+.restart{
+  padding:14px 28px; border:none; border-radius:16px; font-size:16px; font-weight:700;
+  cursor:pointer; color:#fff; background:linear-gradient(135deg,#0f4c81,#0ea5e9); transition: all 0.2s;
+  width: 100%;
+}
+.restart:hover{transform: translateY(-2px); box-shadow: 0 6px 18px rgba(15, 76, 129, 0.35);}
+
+.review-btn {
+  padding: 14px 28px; border: 2px solid var(--success); border-radius: 16px; font-size: 16px; font-weight: 700;
+  cursor: pointer; color: var(--success); background: transparent; transition: all 0.2s;
+  width: 100%; display: none;
+}
+.review-btn:hover { background: var(--success); color: #fff; transform: translateY(-2px); }
+
+.download-btn {
+  padding: 14px 28px; border: 2px solid var(--primary); border-radius: 16px; font-size: 16px; font-weight: 700;
+  cursor: pointer; color: var(--primary); background: transparent; transition: all 0.2s;
+  width: 100%;
+}
+.download-btn:hover { background: var(--primary); color: #fff; transform: translateY(-2px); }
+
+.explain-box{display:none;margin-top:16px;padding:14px 16px;border-radius:14px;background:rgba(14,165,233,.08);border:1px dashed var(--secondary);text-align:left;font-size:14px;line-height:1.6;animation:popIn .3s ease}
+.explain-box .ex-title{font-weight:800;color:var(--primary);margin-bottom:6px}
+.explain-box .ex-ar{direction:rtl;text-align:right;margin-bottom:6px;font-weight:600}
+.explain-box .ex-en{direction:ltr;text-align:left;opacity:.9}
+.topic-tag{display:inline-block;font-size:12px;font-weight:700;color:var(--primary);background:rgba(14,165,233,.12);padding:3px 10px;border-radius:50px;margin-bottom:10px}
+</style>
+</head>
+<body>
+
+<div class="container">
+    
+    <div class="hero">
+        <h1>Strategies Midterm</h1>
+        <h2>Question Bank app</h2>
+        <p>إعداد الفرقة الثانية معهد تمريض شربين 𝑨𝑴</p>
+    </div>
+
+    <div class="top-bar">
+        <div class="settings-bar">
+            <button class="setting-btn" id="soundToggle" onclick="toggleSound()"><span>🔊</span> Sound On</button>
+            <button class="setting-btn" id="vibeToggle" onclick="toggleVibration()"><span>📳</span> Vibe On</button>
+        </div>
+        <button class="theme-toggle" onclick="toggleTheme()"><span>☀️</span> Light Mode</button>
+    </div>
+
+    <div class="card" id="startCard">
+        <div class="welcome-msg">✨🤍🐣 صلي علي النبي ✨</div>
+        
+        <div id="highScoreView" style="display:none; font-weight:bold; margin:0 auto 16px auto; color:var(--success); font-size:14px; background:rgba(34, 197, 94, 0.08); padding:8px 16px; border-radius:50px; border:1px dashed var(--success); width:fit-content; direction:rtl;">
+            🏆 أعلى سكور: <span id="highScoreVal">0%</span>
+        </div>
+
+        <div class="mode-selector">
+            <label class="mode-option">
+                <input type="radio" name="quizMode" value="sequential" onchange="setMode('sequential')">
+                <span>🔢 وضع الترتيب (أسئلة واختيارات مرتبة بدون عشوائية)</span>
+            </label>
+            <label class="mode-option">
+                <input type="radio" name="quizMode" value="study" checked onchange="setMode('study')">
+                <span>📖 وضع المذاكرة (عشوائي + تصحيح فوري للمعلومات)</span>
+            </label>
+            <label class="mode-option">
+                <input type="radio" name="quizMode" value="exam" onchange="setMode('exam')">
+                <span>⏳ وضع الامتحان (عشوائي + تايمر وبدون كشف الإجابات)</span>
+            </label>
+            <label class="mode-option">
+                <input type="radio" name="quizMode" value="bookmark" onchange="setMode('bookmark')">
+                <span>🔖 مراجعة الأسئلة المميزة فقط</span>
+            </label>
+            <button class="resume-btn" id="resumeBtn" onclick="resumeQuiz()">استكمال محاولة الحل السابقة 🔄</button>
+        </div>
+
+        <button class="start-btn" onclick="startQuiz()">Start 🚀</button>
+    </div>
+
+    <div id="quizContainer" style="display:none">
+        <div class="timer-box" id="timerBox">⏳ المتبقي: <span id="timerDisplay">00:00</span></div>
+        <div class="mid-nav" id="midNav"></div>
+        <div class="card" id="quizCard">
+            <div class="progress-container">
+                <span id="progressText">0 / 0 Answered</span>
+                <span id="progressPercent">0%</span>
+            </div>
+            <div class="progress"><span id="progressBar"></span></div>
+            <div class="question-box">
+                
+                <div class="q-tools-bar">
+                    <span class="q-badge" id="qIndexBadge">Question</span>
+                    <div class="q-actions">
+                        <button id="translateBtn" onclick="toggleTranslation()" title="ترجمة السؤال للعربية" style="display:none;">🌍</button>
+                        <button id="speakBtn" onclick="speakQuestion()" title="بدء النطق من أول وجديد">🔊</button>
+                        <button id="stopSpeakBtn" onclick="toggleSpeechPause()" title="إيقاف مؤقت" style="display:none;">⏸️</button>
+                        <button id="flagBtn" onclick="toggleFlag()" title="Bookmark Question">🔖</button>
+                    </div>
+                </div>
+
+                <div class="topic-tag" id="topicTag"></div>
+                <div class="question" id="question"></div>
+                
+                <div class="translation-box" id="translationBox">
+                    <div class="trans-title">🎯 الترجمة العربية:</div>
+                    <div class="trans-q" id="transQText"></div>
+                    <ul class="trans-o-list" id="transOList"></ul>
+                </div>
+
+                <div class="options" id="options" style="margin-top: 20px;"></div>
+                <div class="explain-box" id="explainBox"><div class="ex-title">💡 الشرح / Explanation</div><div class="ex-ar" id="exAr"></div><div class="ex-en" id="exEn"></div></div>
+            </div>
+            
+            <div class="extra-nav" style="margin-top: 26px;">
+                <button class="home-btn" onclick="goToHome()">🏠 الرئيسية (حفظ)</button>
+                <button class="finish-btn" onclick="showResult()">📊 إنهاء وعرض النتيجة</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card result" id="resultCard" style="display:none">
+        <div class="result-msg" style="color: var(--primary); font-weight: bold;">🤍 صلي على النبي </div>
+        <div class="result-msg">
+            متزعلش لو نتيجة حلك مكنتش أحسن حاجه خليك ديما فاكر ان لسه فيه فرصه تحاول سمي الله وحاول تاني
+            <span class="duck-msg">( 🐥 أشطر كتكوت يخواشي )</span>
+        </div>
+        
+        <div class="stats-container">
+            <div class="stat-box">
+                <div class="stat-val" id="statCorrect" style="color: var(--success);">0</div>
+                <div class="stat-lbl">Correct ✅</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-val" id="statWrong" style="color: var(--danger);">0</div>
+                <div class="stat-lbl">Wrong ❌</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-val" id="statRatio" style="color: var(--secondary);">0%</div>
+                <div class="stat-lbl">Accuracy 🎯</div>
+            </div>
+        </div>
+
+        <h2>Final Result</h2>
+        <div class="score" id="scoreText"></div>
+        <div class="badge-title" id="badgeTitle"></div>
+        
+        <div class="result-actions-container">
+            <button class="review-btn" id="reviewBtn" onclick="startReview()">🔁 مراجعة الأخطاء فقط</button>
+            <button class="download-btn" id="downloadBtn" onclick="downloadResultCard()">📸 تحميل النتيجة كصورة</button>
+            <button class="restart" onclick="restartQuiz()">🔄 Restart Quiz</button>
+        </div>
+    </div>
+</div>
+
+<!-- Sticky Bottom Nav -->
+<div class="sticky-nav" id="stickyNav">
+    <div class="sticky-nav-inner">
+        <button class="nav-btn prev" onclick="prevQ()">⬅ Previous</button>
+        <button class="nav-btn next" onclick="nextQ()">Next ➡</button>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<script>
+const originalQuiz = [
+  {
+ "q": "Health is a highly objective concept.",
+ "o": ["True", "False"],
+ "a": 1,
+ "topic": "Concepts of Health",
+ "trQ": "الصحة مفهوم موضوعي للغاية.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "الصحة مفهوم شامل ونسبي ويتأثر بالثقافة والمجتمع، وليست موضوعية تماماً.",
+ "expEn": "Health is a relative and comprehensive concept, not entirely objective."
+},
+{
+ "q": "Following morally acceptable laws is principle of Justice.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Ethics",
+ "trQ": "اتباع القوانين المقبولة أخلاقياً هو مبدأ العدالة.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "مبدأ العدالة يعني معاملة البشرية بتساوٍ وتوزيع الموارد بشكل عادل، وهو ما يتوافق مع القوانين الأخلاقية.",
+ "expEn": "Justice means treating human beings and distributing resources fairly, which aligns with morally acceptable laws."
+},
+{
+ "q": "Role-playing is type of projective techniques.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Educational Methods",
+ "trQ": "لعب الأدوار (Role-playing) هو نوع من التقنيات الإسقاطية.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "لعب الأدوار يسمح للأفراد بإسقاط مشاعرهم وأفكارهم الداخلية من خلال تمثيل مواقف معينة.",
+ "expEn": "Role-playing allows individuals to project their internal feelings and thoughts through acting out situations."
+},
+{
+ "q": "Evaluation is a one-time event according to a set time table in the action plan.",
+ "o": ["True", "False"],
+ "a": 1,
+ "topic": "Evaluation",
+ "trQ": "التقييم هو حدث لمرة واحدة وفق جدول زمني محدد في خطة العمل.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "التقييم هو عملية مستمرة ومستمرة لمراقبة التقدم وتحسين البرامج، وليس حدثاً لمرة واحدة.",
+ "expEn": "Evaluation is an ongoing, continuous process to monitor progress and improve programs, not a one-time event."
+},
+{
+ "q": "Health education in primary prevention is directed both at helping individuals understand their risk and at promoting healthy behaviors.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Health Education",
+ "trQ": "التثقيف الصحي في الوقاية الأولية يهدف إلى مساعدة الأفراد على فهم مخاطرهم وتعزيز السلوكيات الصحية.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "الوقاية الأولية تركز على منع حدوث المرض من خلال تعزيز السلوكيات الصحية وفهم المخاطر.",
+ "expEn": "Primary prevention focuses on preventing disease before it occurs by promoting healthy behaviors and understanding risks."
+},
+{
+ "q": "Non-maleficence refers to non-infliction of harm to others.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Ethics",
+ "trQ": "عدم الإضرار (Non-maleficence) يشير إلى عدم إلحاق الأذى بالآخرين.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "هذا هو التعريف الدقيق لمبدأ عدم الإضرار في أخلاقيات الرعاية الصحية.",
+ "expEn": "This is the exact definition of the principle of non-maleficence in healthcare ethics."
+},
+{
+ "q": "Health educators should treat all information obtained from participants as confidential even if required by law.",
+ "o": ["True", "False"],
+ "a": 1,
+ "topic": "Ethics",
+ "trQ": "يجب على مثقفي الصحة التعامل مع جميع المعلومات التي يتم الحصول عليها من المشاركين على أنها سرية حتى لو كان القانون يتطلب ذلك.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "السرية مهمة، لكن إذا تطلب القانون الإفصاح (مثل الأمراض المعدية الخطيرة أو الإضرار بالنفس)، فيجب الإفصاح.",
+ "expEn": "Confidentiality is important, but if the law requires disclosure (e.g., serious communicable diseases or self-harm), it must be disclosed."
+},
+{
+ "q": "Projective techniques are structured and direct forms of questioning which encourage the respondents to project their underlying motivations.",
+ "o": ["True", "False"],
+ "a": 1,
+ "topic": "Educational Methods",
+ "trQ": "التقنيات الإسقاطية هي أشكال منظمة ومباشرة من الاستجواب التي تشجع المستجيبين على إسقاط دوافعهم الكامنة.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "التقنيات الإسقاطية هي تقنيات غير منظمة وغير مباشرة (unstructured and indirect).",
+ "expEn": "Projective techniques are unstructured and indirect forms of questioning."
+},
+{
+ "q": "Subjective state of a person who states that he is not being well is the concept of wellness.",
+ "o": ["True", "False"],
+ "a": 1,
+ "topic": "Concepts of Health",
+ "trQ": "الحالة الذاتية للشخص الذي يصرح بأنه ليس بصحة جيدة هي مفهوم العافية (Wellness).",
+ "trO": ["صح", "خطأ"],
+ "expAr": "هذا المفهوم هو مفهوم 'المرض' (Illness) وليس العافية. العافية هي السعي للوصول لأقصى إمكانات الصحة.",
+ "expEn": "This is the concept of 'Illness', not wellness. Wellness is the active pursuit of optimal health."
+},
+{
+ "q": "A state of social dysfunction and individual role with illness are the concept of sickness.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Concepts of Health",
+ "trQ": "حالة الخلل الوظيفي الاجتماعي والدور الفردي مع المرض هي مفهوم الاعتلال (Sickness).",
+ "trO": ["صح", "خطأ"],
+ "expAr": "الاعتلال (Sickness) يشمل الجوانب الاجتماعية للمرض وكيفية تأثير المرض على دور الفرد في المجتمع.",
+ "expEn": "Sickness encompasses the social aspects of illness and how it affects an individual's role in society."
+},
+{
+ "q": "Human behavior is influenced by several factors, such as genetic, culture and individual values and attitudes.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Behavior",
+ "trQ": "يتأثر السلوك البشري بعدة عوامل، مثل الوراثة والثقافة والقيم والمواقف الفردية.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "السلوك البشري معقد ويتأثر بعوامل بيولوجية (وراثية) وبيئية (ثقافية واجتماعية) ونفسية.",
+ "expEn": "Human behavior is complex and influenced by biological (genetic), environmental (cultural, social), and psychological factors."
+},
+{
+ "q": "Feedback allows the sender to find out how the message is being received.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Communication",
+ "trQ": "تسمح التغذية الراجعة (Feedback) للمرسل بمعرفة كيف يتم استقبال الرسالة.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "التغذية الراجعة هي رد فعل المتلقي الذي يؤكد للمرسل أن الرسالة قد تم فهمها بشكل صحيح.",
+ "expEn": "Feedback is the receiver's response that confirms to the sender that the message has been correctly understood."
+},
+{
+ "q": "Peoples' knowledge, beliefs, values and attitudes are enabling factors.",
+ "o": ["True", "False"],
+ "a": 1,
+ "topic": "Behavior",
+ "trQ": "معرفة الناس ومعتقداتهم وقيمهم ومواقفهم هي عوامل مُمكِّنة (Enabling factors).",
+ "trO": ["صح", "خطأ"],
+ "expAr": "هذه العوامل هي 'عوامل مهيئة أو استعدادية' (Predisposing factors)، بينما العوامل المُمكِّنة تشمل المهارات والموارد المتاحة.",
+ "expEn": "These are 'predisposing factors', whereas enabling factors include skills and available resources."
+},
+{
+ "q": "Compliance behavior is the behavior with a course of prescribed drugs.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Behavior",
+ "trQ": "سلوك الالتزام (Compliance behavior) هو الالتزام بجرعة من الأدوية الموصوفة.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "الالتزام يعني مدى اتباع المريض للتعليمات الطبية الموصوفة.",
+ "expEn": "Compliance means the extent to which a patient follows prescribed medical instructions."
+},
+{
+ "q": "Age difference between the sender and receiver is not considering among barriers to effective communication.",
+ "o": ["True", "False"],
+ "a": 1,
+ "topic": "Communication",
+ "trQ": "الفرق العمري بين المرسل والمستقبل لا يعتبر من بين معوقات التواصل الفعال.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "الفرق في العمر (مثل التحدث لطفل أو مسن) يعتبر من معوقات التواصل الفعال.",
+ "expEn": "Age difference (e.g., talking to a child or elderly) is considered a barrier to effective communication."
+},
+{
+ "q": "Prevention of disease is the measures to prevent the occurrence of disease only.",
+ "o": ["True", "False"],
+ "a": 1,
+ "topic": "Prevention",
+ "trQ": "الوقاية من المرض هي التدابير اللازمة لمنع حدوث المرض فقط.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "الوقاية لا تقتصر على منع الحدوث فقط، بل تشمل الكشف المبكر، الحد من المضاعفات، وإعادة التأهيل.",
+ "expEn": "Prevention is not limited to preventing occurrence only; it includes early detection, limiting complications, and rehabilitation."
+},
+{
+ "q": "Inter-personal communication takes place inside a person and includes the beliefs, feelings and thoughts we make for our actions.",
+ "o": ["True", "False"],
+ "a": 1,
+ "topic": "Communication",
+ "trQ": "التواصل بين الأشخاص (Inter-personal) يحدث داخل الشخص ويشمل المعتقدات والمشاعر والأفكار التي نصنعها لأفعالنا.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "هذا التعريف للتواصل 'الداخلي' (Intra-personal communication)، بينما التواصل بين الأشخاص يحدث بين شخصين أو أكثر.",
+ "expEn": "This is the definition of 'Intra-personal' communication, whereas inter-personal communication occurs between two or more people."
+},
+{
+ "q": "Among the barriers of effective communication is attitudes and beliefs.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Communication",
+ "trQ": "من بين معوقات التواصل الفعال هي المواقف والمعتقدات.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "المواقف والمعتقدات الشخصية يمكن أن تحرف فهم الرسالة وتشكل حاجزاً.",
+ "expEn": "Personal attitudes and beliefs can distort the understanding of the message and form a barrier."
+},
+{
+ "q": "Tertiary level of prevention seeks to limit disability.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Prevention",
+ "trQ": "مستوى الوقاية الثالث (Tertiary) يهدف إلى الحد من الإعاقة.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "الوقاية الثلاثية تهدف إلى تقليل الأثر الضار للمرض، ومنع المضاعفات، والحد من الإعاقة وإعادة التأهيل.",
+ "expEn": "Tertiary prevention aims to reduce the harmful impact of the disease, prevent complications, and limit disability and rehabilitate."
+},
+{
+ "q": "Predisposing factors are person characteristics.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Behavior",
+ "trQ": "العوامل المهيئة (Predisposing factors) هي خصائص الشخص.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "تشمل العوامل المهيئة المعرفة، المواقف، المعتقدات، والقيم الشخصية التي تؤثر على السلوك.",
+ "expEn": "Predisposing factors include knowledge, attitudes, beliefs, and personal values that influence behavior."
+},
+{
+ "q": "There are three types of educational methods for health education.",
+ "o": ["True", "False"],
+ "a": 1,
+ "topic": "Educational Methods",
+ "trQ": "هناك ثلاثة أنواع من الأساليب التعليمية للتثقيف الصحي.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "عادةً يتم تصنيفها إلى أكثر من ثلاثة، مثل: الفردية، الجماعية، والمجتمعية (Mass)، وقد تتداخل التصنيفات.",
+ "expEn": "They are usually classified into more than three, such as individual, group, and mass communication."
+},
+{
+ "q": "Discussion in a group allows people to say what is in their minds.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Educational Methods",
+ "trQ": "المناقشة في مجموعة تسمح للناس بقول ما في أذهانهم.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "المناقشة الجماعية تشجع المشاركة الفعالة والتعبير عن الأفكار والمشاعر.",
+ "expEn": "Group discussion encourages active participation and expression of ideas and feelings."
+},
+{
+ "q": "Meeting is a good teaching method for a large group of people.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Educational Methods",
+ "trQ": "الاجتماع (Meeting) هو وسيلة تعليمية جيدة لمجموعة كبيرة من الناس.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "الاجتماعات هي طريقة جماعية مناسبة للوصول إلى عدد كبير من الأفراد في وقت واحد.",
+ "expEn": "Meetings are a group method suitable for reaching a large number of individuals at once."
+},
+{
+ "q": "Counselors should understand and accept person's feelings.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Counseling",
+ "trQ": "يجب على المستشارين فهم وقبول مشاعر الشخص.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "التعاطف وفهم مشاعر المسترشد هو أساس عملية الإرشاد الفعالة.",
+ "expEn": "Empathy and understanding the client's feelings are the foundation of effective counseling."
+},
+{
+ "q": "Home visit Encourages the prevention of common diseases.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Educational Methods",
+ "trQ": "الزيارة المنزلية تشجع الوقاية من الأمراض الشائعة.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "الزيارات المنزلية تتيح للممرض تقييم البيئة المنزلية وتقديم التثقيف الصحي المناسب.",
+ "expEn": "Home visits allow the nurse to assess the home environment and provide appropriate health education."
+},
+{
+ "q": "Counselors should always respect the privacy of the people.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Counseling",
+ "trQ": "يجب على المستشارين دائماً احترام خصوصية الناس.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "الخصوصية والسرية هي مبادئ أساسية في الإرشاد.",
+ "expEn": "Privacy and confidentiality are fundamental principles in counseling."
+},
+{
+ "q": "Group education permits sharing of experience and skills.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Educational Methods",
+ "trQ": "التعليم الجماعي يسمح بتبادل الخبرات والمهارات.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "التعلم الجماعي يشجع على التفاعل وتبادل الخبرات بين المشاركين.",
+ "expEn": "Group learning encourages interaction and exchange of experiences among participants."
+},
+{
+ "q": "Counseling help individuals to choose, but not forcing them.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Counseling",
+ "trQ": "الإرشاد يساعد الأفراد على الاختيار، ولكن لا يجبرهم.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "الإرشاد يهدف إلى تمكين الفرد من اتخاذ قراراته بنفسه، وليس فرض قرارات معينة.",
+ "expEn": "Counseling aims to empower the individual to make their own decisions, not to impose specific decisions."
+},
+{
+ "q": "Health education helps people to change attitude and behaviors.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Health Education",
+ "trQ": "التثقيف الصحي يساعد الناس على تغيير مواقفهم وسلوكياتهم.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "الهدف الأساسي للتثقيف الصحي هو إحداث تغيير إيجابي في السلوك والمواقف الصحية.",
+ "expEn": "The primary goal of health education is to bring about positive change in health behavior and attitudes."
+},
+{
+ "q": "Counseling requires good relationship between the counselor and the client.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Counseling",
+ "trQ": "الإرشاد يتطلب علاقة جيدة بين المستشار والعميل.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "العلاقة العلاجية القائمة على الثقة والاحترام ضرورية لنجاح الإرشاد.",
+ "expEn": "A therapeutic relationship based on trust and respect is essential for successful counseling."
+},
+{
+ "q": "Physical health is the anatomical integrity of the body.",
+ "o": ["True", "False"],
+ "a": 1,
+ "topic": "Concepts of Health",
+ "trQ": "الصحة البدنية هي السلامة التشريحية للجسم.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "الصحة البدنية تشمل أيضاً الوظائف الفسيولوجية السليمة، وليس فقط السلامة التشريحية.",
+ "expEn": "Physical health also includes proper physiological functions, not just anatomical integrity."
+},
+{
+ "q": "Designed health education is systematic health activity.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Health Education",
+ "trQ": "التثقيف الصحي المصمم هو نشاط صحي منهجي.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "التثقيف الصحي يعتمد على خطط منهجية ومنظمة لتحقيق أهداف محددة.",
+ "expEn": "Health education relies on systematic and organized plans to achieve specific goals."
+},
+{
+ "q": "Healthy nutrition is a secondary level of prevention.",
+ "o": ["True", "False"],
+ "a": 1,
+ "topic": "Prevention",
+ "trQ": "التغذية الصحية هي مستوى وقاية ثانوي.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "التغذية الصحية هي مستوى وقاية أولي (Primary)، لأنها تمنع حدوث المرض.",
+ "expEn": "Healthy nutrition is a primary level of prevention, as it prevents the occurrence of disease."
+},
+{
+ "q": "Early detection of hypertension is a primary level of prevention.",
+ "o": ["True", "False"],
+ "a": 1,
+ "topic": "Prevention",
+ "trQ": "الكشف المبكر عن ارتفاع ضغط الدم هو مستوى وقاية أولي.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "الكشف المبكر هو مستوى وقاية ثانوي (Secondary)، لأنه يهدف إلى اكتشاف المرض في مراحله المبكرة.",
+ "expEn": "Early detection is a secondary level of prevention, as it aims to detect the disease in its early stages."
+},
+{
+ "q": "Successful communication must pass through four stages.",
+ "o": ["True", "False"],
+ "a": 1,
+ "topic": "Communication",
+ "trQ": "يجب أن يمر التواصل الناجح عبر أربع مراحل.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "عملية التواصل تشمل ستة عناصر رئيسية (المرسل، الرسالة، القناة، المستقبل، التغذية الراجعة، البيئة).",
+ "expEn": "The communication process includes six main elements (sender, message, channel, receiver, feedback, environment)."
+},
+{
+ "q": "Working in groups facilitates utilization of all members' resources.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Group Dynamics",
+ "trQ": "العمل في مجموعات يسهل الاستفادة من موارد جميع الأعضاء.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "العمل الجماعي يجمع مهارات ومعارف مختلفة لتحقيق هدف مشترك.",
+ "expEn": "Teamwork brings together diverse skills and knowledge to achieve a common goal."
+},
+{
+ "q": "Demonstrations help people to learn new skills.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Educational Methods",
+ "trQ": "العروض العملية (Demonstrations) تساعد الناس على تعلم مهارات جديدة.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "العروض العملية تعتمد على 'التعلم بالمشاهدة والتطبيق' وهي ممتازة لتعلم المهارات.",
+ "expEn": "Demonstrations rely on 'learning by observing and doing' and are excellent for learning skills."
+},
+{
+ "q": "Meeting is not a good teaching method for a large group of people.",
+ "o": ["True", "False"],
+ "a": 1,
+ "topic": "Educational Methods",
+ "trQ": "الاجتماع ليس وسيلة تعليمية جيدة لمجموعة كبيرة من الناس.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "الاجتماعات هي بالفعل طريقة جيدة للوصول لمجموعات كبيرة (على عكس ما تقوله العبارة).",
+ "expEn": "Meetings are indeed a good method for reaching large groups (contrary to the statement)."
+},
+{
+ "q": "There are organized activities such as regular meetings and project as a characteristic of informal group.",
+ "o": ["True", "False"],
+ "a": 1,
+ "topic": "Group Dynamics",
+ "trQ": "هناك أنشطة منظمة مثل الاجتماعات المنتظمة والمشاريع كخاصية للمجموعة غير الرسمية.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "هذه الخصائص للمجموعات 'الرسمية' (Formal groups). المجموعات غير الرسمية ليس لها قواعد صارمة أو أنشطة منظمة مسبقاً.",
+ "expEn": "These are characteristics of 'formal' groups. Informal groups do not have strict rules or pre-organized activities."
+},
+{
+ "q": "Age difference between the sender and receiver is not considering among barriers to effective communication.",
+ "o": ["True", "False"],
+ "a": 1,
+ "topic": "Communication",
+ "trQ": "الفرق العمري بين المرسل والمستقبل لا يعتبر من بين معوقات التواصل الفعال.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "الفرق العمري يعتبر من معوقات التواصل.",
+ "expEn": "Age difference is considered a barrier to communication."
+},
+{
+ "q": "There are three types of educational methods for health education.",
+ "o": ["True", "False"],
+ "a": 1,
+ "topic": "Educational Methods",
+ "trQ": "هناك ثلاثة أنواع من الأساليب التعليمية للتثقيف الصحي.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "مكررة سابقاً. التصنيفات أكثر من ثلاثة.",
+ "expEn": "Repeated. Classification is more than three."
+},
+{
+ "q": "Pre-service training involves the preparation in general of any trainer for qualifying a specific job.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Training",
+ "trQ": "التدريب قبل الخدمة (Pre-service) يشمل الإعداد العام لأي مدرب للتأهيل لوظيفة معينة.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "التدريب قبل الخدمة يتم قبل الالتحاق بالوظيفة لتأهيل الشخص لها.",
+ "expEn": "Pre-service training occurs before joining the job to qualify the person for it."
+},
+{
+ "q": "Working in groups facilitates utilization of all members resources.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Group Dynamics",
+ "trQ": "العمل في مجموعات يسهل الاستفادة من موارد جميع الأعضاء.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "مكررة، والإجابة صحيحة.",
+ "expEn": "Repeated, and the answer is true."
+},
+{
+ "q": "Ethics is the process of education in which both the mind and body are brought under exercise.",
+ "o": ["True", "False"],
+ "a": 1,
+ "topic": "Ethics",
+ "trQ": "الأخلاقيات هي عملية التعليم التي يتم فيها إخضاع العقل والجسم للتمرين.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "هذا تعريف 'التربية البدنية' أو 'التعليم'، وليس الأخلاقيات. الأخلاقيات تتعلق بالمبادئ والقيم.",
+ "expEn": "This is the definition of 'physical education' or 'training', not ethics. Ethics relates to principles and values."
+},
+{
+ "q": "Voice mail is a type of synchronous technology of health education.",
+ "o": ["True", "False"],
+ "a": 1,
+ "topic": "Technology",
+ "trQ": "البريد الصوتي هو نوع من التكنولوجيا المتزامنة (Synchronous) في التثقيف الصحي.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "البريد الصوتي هو تكنولوجيا 'غير متزامنة' (Asynchronous) لأن المرسل والمستقبل لا يتواصلان في نفس الوقت.",
+ "expEn": "Voice mail is an 'asynchronous' technology because the sender and receiver do not communicate at the same time."
+},
+{
+ "q": "Reinforcing factors are characteristics of environment that helping the health educator.",
+ "o": ["True", "False"],
+ "a": 1,
+ "topic": "Behavior",
+ "trQ": "العوامل المعززة (Reinforcing factors) هي خصائص البيئة التي تساعد مثقف الصحة.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "العوامل المعززة هي المكافآت أو العقوبات التي يتلقاها الفرد من الآخرين (مثل الأسرة أو الأصدقاء) بعد سلوك معين، وليست خصائص بيئة.",
+ "expEn": "Reinforcing factors are rewards or punishments received by the individual from others (like family or friends) after a behavior, not environmental characteristics."
+},
+{
+ "q": "Lifestyle is considering an individual pattern of behavior.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Behavior",
+ "trQ": "نمط الحياة (Lifestyle) يعتبر نمطاً فردياً للسلوك.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "نمط الحياة هو الطريقة التي يعيش بها الشخص، بما في ذلك سلوكياته وعاداته اليومية.",
+ "expEn": "Lifestyle is the way a person lives, including their daily behaviors and habits."
+},
+{
+ "q": "Objective Structured Clinical Examination (OSCE) is type of summative evaluation.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Evaluation",
+ "trQ": "الامتحان السريري الموضوعي المنظم (OSCE) هو نوع من التقييم الختامي (Summative).",
+ "trO": ["صح", "خطأ"],
+ "expAr": "OSCE يستخدم لتقييم كفاءة الطلاب في نهاية البرنامج التدريبي، وهو تقييم ختامي.",
+ "expEn": "OSCE is used to assess students' competence at the end of a training program, which is summative evaluation."
+},
+{
+ "q": "Health educators empower individuals to adopt healthy lifestyles through coercion.",
+ "o": ["True", "False"],
+ "a": 1,
+ "topic": "Health Education",
+ "trQ": "مثقفو الصحة يمكّنون الأفراد من تبني أنماط حياة صحية من خلال الإكراه.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "التثقيف الصحي يعتمد على الإقناع والتمكين، وليس الإكراه (Coercion).",
+ "expEn": "Health education relies on persuasion and empowerment, not coercion."
+},
+{
+ "q": "The informed decision making approach is giving people information, problem solving and decision making skills to make decisions but leaving the actual choice to the people.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Health Education Approaches",
+ "trQ": "نهج اتخاذ القرار المستنير هو إعطاء الناس المعلومات ومهارات حل المشكلات واتخاذ القرارات لاتخاذ القرارات ولكن ترك الاختيار الفعلي للناس.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "هذا هو التعريف الصحيح لنهج اتخاذ القرار المستنير، حيث يتم تمكين الفرد وليس إجباره.",
+ "expEn": "This is the correct definition of the informed decision-making approach, where the individual is empowered, not forced."
+},
+{
+ "q": "Real-time telehealth services can be used to consult, diagnose and treat patients.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Technology",
+ "trQ": "يمكن استخدام خدمات الصحة عن بعد في الوقت الفعلي لاستشارة المرضى وتشخيصهم وعلاجهم.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "الخدمات المتزامنة (Real-time) تسمح بالتفاعل المباشر بين الطبيب والمريض.",
+ "expEn": "Synchronous (real-time) services allow direct interaction between doctor and patient."
+},
+{
+ "q": "Non-maleficence is considered to be related to positive acts with an overall aim of doing good.",
+ "o": ["True", "False"],
+ "a": 1,
+ "topic": "Ethics",
+ "trQ": "يعتبر عدم الإضرار (Non-maleficence) مرتبطاً بالأفعال الإيجابية بهدف عام هو فعل الخير.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "هذا هو تعريف 'الإحسان' (Beneficence). عدم الإضرار يعني الامتناع عن إلحاق الأذى.",
+ "expEn": "This is the definition of 'Beneficence'. Non-maleficence means refraining from causing harm."
+},
+{
+ "q": "Motivation is the key to learn, if people benefit from action, they will encouraged to repeating the action.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Learning",
+ "trQ": "الدافع هو مفتاح التعلم، إذا استفاد الناس من الفعل، فسيتم تشجيعهم على تكرار الفعل.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "الدافع (سواء داخلي أو خارجي) هو محرك أساسي للتعلم وتكرار السلوكيات المجزية.",
+ "expEn": "Motivation (intrinsic or extrinsic) is a primary driver for learning and repeating rewarding behaviors."
+},
+{
+ "q": "Teaching is the interaction between the teacher and the learner in order to bring expected changes in the behavior of the learner.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Learning",
+ "trQ": "التدريس هو التفاعل بين المعلم والمتعلم من أجل إحداث تغييرات متوقعة في سلوك المتعلم.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "هذا هو التعريف الشامل لعملية التدريس.",
+ "expEn": "This is the comprehensive definition of the teaching process."
+},
+{
+ "q": "Active learner is more socially inclined than passive learners and tends to do better when they communicate with other fellow students.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Learning",
+ "trQ": "المتعلم النشط أكثر ميلاً اجتماعياً من المتعلمين السلبيين ويميل إلى الأداء بشكل أفضل عندما يتواصل مع زملائه الطلاب.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "المشاركة النشطة والتفاعل الاجتماعي يعززان عملية التعلم.",
+ "expEn": "Active participation and social interaction enhance the learning process."
+},
+{
+ "q": "Competencies of planning effective health education programs achieved through distinguish between behavior that fosters and hinders well-being.",
+ "o": ["True", "False"],
+ "a": 1,
+ "topic": "Health Education",
+ "trQ": "يتم تحقيق كفاءات تخطيط برامج التثقيف الصحي الفعالة من خلال التمييز بين السلوك الذي يعزز ويعيق الرفاهية.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "كفاءة تخطيط البرامج تشمل تقييم الاحتياجات، تحديد الأهداف، تصميم الأنشطة، وليس فقط التمييز بين السلوكيات.",
+ "expEn": "Program planning competency involves needs assessment, setting objectives, designing activities, not just distinguishing behaviors."
+},
+{
+ "q": "Develop plans to assess achievement of program objectives is considered as a competency of effective evaluation of health education programs.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Evaluation",
+ "trQ": "يعتبر تطوير خطط لتقييم تحقيق أهداف البرنامج كفاءة في التقييم الفعال لبرامج التثقيف الصحي.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "تطوير خطة تقييم هو جزء أساسي من كفاءة التقييم.",
+ "expEn": "Developing an evaluation plan is an essential part of evaluation competency."
+},
+{
+ "q": "The passive learner is that individual who strives to isolate himself from other students.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Learning",
+ "trQ": "المتعلم السلبي هو الفرد الذي يسعى لعزل نفسه عن الطلاب الآخرين.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "المتعلم السلبي لا يشارك بفعالية ويفضل العزلة أو البقاء متلقياً فقط.",
+ "expEn": "A passive learner does not participate actively and prefers isolation or just being a receiver."
+},
+{
+ "q": "Fear is a motivator for learner and it does not destroy the learning process.",
+ "o": ["True", "False"],
+ "a": 1,
+ "topic": "Learning",
+ "trQ": "الخوف هو دافع للمتعلم ولا يدمر عملية التعلم.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "الخوف يمكن أن يكون مدمراً للتعلم ويسبب القلق والتوتر، مما يعيق الاستيعاب.",
+ "expEn": "Fear can be destructive to learning, causing anxiety and stress, which hinders comprehension."
+},
+{
+ "q": "Veracity is the obligation to tell the truth and not to lie or deceive others.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Ethics",
+ "trQ": "الصدق (Veracity) هو الالتزام بقول الحقيقة وعدم الكذب أو خداع الآخرين.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "هذا هو التعريف الصحيح لمبدأ الصدق.",
+ "expEn": "This is the correct definition of the principle of veracity."
+},
+{
+ "q": "Learning is relatively a change in mental, emotional, functioning, and behavior as result of experience.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Learning",
+ "trQ": "التعلم هو تغيير نسبي في الوظائف العقلية والعاطفية والسلوك نتيجة للخبرة.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "هذا تعريف شامل لعملية التعلم.",
+ "expEn": "This is a comprehensive definition of the learning process."
+},
+{
+ "q": "Both teaching and learning are enhanced by feedback.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Learning",
+ "trQ": "يتم تعزيز كل من التعليم والتعلم عن طريق التغذية الراجعة.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "التغذية الراجعة تساعد المعلم على تعديل استراتيجيته وتساعد المتعلم على تصحيح مساره.",
+ "expEn": "Feedback helps the teacher adjust their strategy and helps the learner correct their course."
+},
+{
+ "q": "Health education aims at change of behavior.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Health Education",
+ "trQ": "التثقيف الصحي يهدف إلى تغيير السلوك.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "تغيير السلوك نحو الأفضل هو الهدف الأساسي.",
+ "expEn": "Changing behavior for the better is the primary goal."
+},
+{
+ "q": "A good sense of humor is another great tool that helps a teacher to simplify his task.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Learning",
+ "trQ": "روح الدعابة الجيدة هي أداة رائعة أخرى تساعد المعلم على تبسيط مهمته.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "الفكاهة تقلل التوتر وتجعل بيئة التعلم أكثر جذباً.",
+ "expEn": "Humor reduces tension and makes the learning environment more engaging."
+},
+{
+ "q": "Connect too many people all over the world consider one of advantages of internet and web sites.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Technology",
+ "trQ": "ربط الكثير من الناس في جميع أنحاء العالم يعتبر من مزايا الإنترنت ومواقع الويب.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "الإنترنت يزيل الحواجز الجغرافية ويتيح التواصل العالمي.",
+ "expEn": "The internet removes geographical barriers and enables global communication."
+},
+{
+ "q": "Managing health education programs & personnel consider one of role of health educator.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Health Education",
+ "trQ": "إدارة برامج التثقيف الصحي والموظفين تعتبر من أدوار مثقف الصحة.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "مثقف الصحة لا يقدم التثقيف فقط، بل يدير البرامج والموارد.",
+ "expEn": "A health educator doesn't just provide education; they manage programs and resources."
+},
+{
+ "q": "The health educator should use terms that can be immediately understood. Highly scientific jargon should be used.",
+ "o": ["True", "False"],
+ "a": 1,
+ "topic": "Communication",
+ "trQ": "يجب على مثقف الصحة استخدام المصطلحات التي يمكن فهمها على الفور. يجب استخدام المصطلحات العلمية للغاية.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "يجب تجنب المصطلحات العلمية المعقدة واستخدام لغة بسيطة ومفهومة للجمهور.",
+ "expEn": "Complex scientific jargon should be avoided; simple, understandable language should be used for the audience."
+},
+{
+ "q": "Active learner role that builds motivation consider one of disadvantages of individual teaching.",
+ "o": ["True", "False"],
+ "a": 1,
+ "topic": "Educational Methods",
+ "trQ": "دور المتعلم النشط الذي يبني الدافعية يعتبر من عيوب التدريس الفردي.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "هذه ميزة (Advantage) وليست عيباً. من عيوب التعليم الفردي أنه مكلف ويستغرق وقتاً.",
+ "expEn": "This is an advantage, not a disadvantage. Disadvantages include being costly and time-consuming."
+},
+{
+ "q": "In remote monitoring providers can observe diagnostic indicators such as blood pressure and insulin levels without requiring patients to leave their homes.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Technology",
+ "trQ": "في المراقبة عن بعد، يمكن لمقدمي الخدمة مراقبة المؤشرات التشخيصية مثل ضغط الدم ومستويات الأنسولين دون مطالبة المرضى بمغادرة منازلهم.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "هذه إحدى مزايا الصحة الإلكترونية (eHealth).",
+ "expEn": "This is one of the advantages of eHealth."
+},
+{
+ "q": "In store and forward or asynchronous telehealth services the sender and receiver are not required to communicate with each other at the same time.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Technology",
+ "trQ": "في خدمات الصحة عن بعد المخزنة أو غير المتزامنة، لا يُطلب من المرسل والمستقبل التواصل مع بعضهما البعض في نفس الوقت.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "هذا هو تعريف التكنولوجيا غير المتزامنة (Asynchronous).",
+ "expEn": "This is the definition of asynchronous technology."
+},
+{
+ "q": "Sensory losses such as hearing deficiency, visual deficiency may affect negatively on health education.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Communication",
+ "trQ": "قد تؤثر فقدان الحواس مثل ضعف السمع أو ضعف البصر سلباً على التثقيف الصحي.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "فقدان الحواس يشكل حاجزاً في التواصل ويجب استخدام وسائل بديلة.",
+ "expEn": "Sensory loss forms a communication barrier and alternative methods must be used."
+},
+{
+ "q": "Competencies of implementing health education programs achieved through formulate appropriate and measurable program objectives.",
+ "o": ["True", "False"],
+ "a": 1,
+ "topic": "Health Education",
+ "trQ": "يتم تحقيق كفاءات تنفيذ برامج التثقيف الصحي من خلال صياغة أهداف برنامج مناسبة وقابلة للقياس.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "صياغة الأهداف هي جزء من 'التخطيط' (Planning)، وليست من 'التنفيذ' (Implementation). التنفيذ يشمل إدارة الأنشطة والموارد.",
+ "expEn": "Formulating objectives is part of 'planning', not 'implementation'. Implementation involves managing activities and resources."
+},
+{
+ "q": "Methods of health education are the techniques in which series of activities are carried out to communicate ideas, information and develops necessary skills and attitude.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Educational Methods",
+ "trQ": "أساليب التثقيف الصحي هي التقنيات التي يتم من خلالها تنفيذ سلسلة من الأنشطة لتوصيل الأفكار والمعلومات وتطوير المهارات والمواقف اللازمة.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "تعريف صحيح لأساليب التثقيف الصحي.",
+ "expEn": "Correct definition of health education methods."
+},
+{
+ "q": "Counseling is to meet and talk each other and collect information and ideas.",
+ "o": ["True", "False"],
+ "a": 1,
+ "topic": "Counseling",
+ "trQ": "الإرشاد هو الاجتماع والتحدث مع بعضنا البعض وجمع المعلومات والأفكار.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "هذا وصف محادثة عامة. الإرشاد هو عملية منظمة تهدف إلى مساعدة العميل على فهم نفسه وحل مشكلاته.",
+ "expEn": "This describes a general conversation. Counseling is a structured process aimed at helping the client understand themselves and solve problems."
+},
+{
+ "q": "Interpersonal communication includes the process of education, motivation and counseling and starts with understanding the critical role of good client service.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Communication",
+ "trQ": "يشمل التواصل بين الأشخاص عملية التعليم والتحفيز والإرشاد ويبدأ بفهم الدور الحاسم لخدمة العملاء الجيدة.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "التواصل بين الأشخاص هو الأداة الأساسية للتثقيف والإرشاد.",
+ "expEn": "Interpersonal communication is the primary tool for education and counseling."
+},
+{
+ "q": "One of the aims of health education is to helping people to make decisions about their health and acquire the necessary confidence and skills to put their decisions into practice.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Health Education",
+ "trQ": "من أهداف التثقيف الصحي مساعدة الناس على اتخاذ قرارات بشأن صحتهم واكتساب الثقة والمهارات اللازمة لوضع قراراتهم موضع التنفيذ.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "التمكين واتخاذ القرارات المستنيرة هو هدف أساسي.",
+ "expEn": "Empowerment and informed decision-making are primary goals."
+},
+{
+ "q": "Learners should be in interaction between teacher in order to get proper feedback on their self-directed subjects and consult to teacher for correctness and evaluation.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Learning",
+ "trQ": "يجب أن يكون المتعلمون في تفاعل مع المعلم من أجل الحصول على تعليقات مناسبة حول مواضيعهم الموجهة ذاتياً واستشارة المعلم للصحة والتقييم.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "التفاعل مع المعلم يعزز التعلم الموجه ذاتياً.",
+ "expEn": "Interaction with the teacher enhances self-directed learning."
+},
+{
+ "q": "Distance learning technologies can provide convenient locations for both students and instructors.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Technology",
+ "trQ": "يمكن لتقنيات التعلم عن بعد توفير مواقع مريحة لكل من الطلاب والمعلمين.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "التعلم عن بعد يسمح بالمرونة الجغرافية.",
+ "expEn": "Distance learning allows for geographical flexibility."
+},
+{
+ "q": "field trip is a planned visit to a place away from normal environment to provide practical knowledge in real situation with costly saving for time and money.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Educational Methods",
+ "trQ": "الرحلة الميدانية هي زيارة مخططة لمكان بعيد عن البيئة العادية لتوفير معرفة عملية في موقف حقيقي مع توفير مكلف للوقت والمال.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "الرحلات الميدانية توفر خبرة واقعية.",
+ "expEn": "Field trips provide realistic experience."
+},
+{
+ "q": "Ask and assess is considered as the first step of counseling process.",
+ "o": ["True", "False"],
+ "a": 1,
+ "topic": "Counseling",
+ "trQ": "السؤال والتقييم يعتبر الخطوة الأولى في عملية الإرشاد.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "الخطوة الأولى عادةً هي 'بناء علاقة' (Building rapport) أو الاستقبال. التقييم يأتي بعد ذلك.",
+ "expEn": "The first step is usually 'building rapport' or greeting. Assessment comes after."
+},
+{
+ "q": "An ideal group for health education may consist of six to twelve members depending upon situation.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Group Dynamics",
+ "trQ": "المجموعة المثالية للتثقيف الصحي قد تتكون من ستة إلى اثني عشر عضواً حسب الموقف.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "هذا الحجم يسمح بمشاركة الجميع دون أن تصبح المجموعة كبيرة جداً.",
+ "expEn": "This size allows everyone to participate without the group becoming too large."
+},
+{
+ "q": "Effective counseling shouldn't be interactive and client centered.",
+ "o": ["True", "False"],
+ "a": 1,
+ "topic": "Counseling",
+ "trQ": "الإرشاد الفعال لا ينبغي أن يكون تفاعلياً ومرتكزاً على العميل.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "الإرشاد الفعال يجب أن يكون تفاعلياً ومرتكزاً على العميل (Client-centered).",
+ "expEn": "Effective counseling must be interactive and client-centered."
+},
+{
+ "q": "The most important aspect of effective counseling is centering the interaction and discussion on the needs and desires of each client.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Counseling",
+ "trQ": "أهم جانب في الإرشاد الفعال هو تركيز التفاعل والمناقشة على احتياجات ورغبات كل عميل.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "التركيز على العميل هو جوهر الإرشاد.",
+ "expEn": "Focusing on the client is the core of counseling."
+},
+{
+ "q": "Ask open-ended question about main points of counseling is helpful in the close phase of counseling.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Counseling",
+ "trQ": "طرح أسئلة مفتوحة حول النقاط الرئيسية للإرشاد مفيد في المرحلة الختامية للإرشاد.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "الأسئلة المفتوحة في النهاية تساعد على التأكد من فهم العميل وتلخيص ما تم مناقشته.",
+ "expEn": "Open-ended questions at the end help ensure the client's understanding and summarize what was discussed."
+},
+{
+ "q": "Printed materials are one type of synchronous learning technology.",
+ "o": ["True", "False"],
+ "a": 1,
+ "topic": "Technology",
+ "trQ": "المواد المطبوعة هي نوع واحد من تكنولوجيا التعلم المتزامنة.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "المواد المطبوعة هي تكنولوجيا 'غير متزامنة' (Asynchronous).",
+ "expEn": "Printed materials are 'asynchronous' technology."
+},
+{
+ "q": "Listening is the basic or first and last principles of good counseling.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Counseling",
+ "trQ": "الاستماع هو المبدأ الأساسي أو الأول والأخير للإرشاد الجيد.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "الاستماع الفعال (Active listening) هو أهم مهارة في الإرشاد.",
+ "expEn": "Active listening is the most important skill in counseling."
+},
+{
+ "q": "Instructor in distance learning should give the proper feedback to the students and help them to interrelate the subjects.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Technology",
+ "trQ": "يجب على المعلم في التعلم عن بعد تقديم التغذية الراجعة المناسبة للطلاب ومساعدتهم على ربط المواد ببعضها.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "دور المعلم في التعلم عن بعد لا يقل أهمية عن التعليم التقليدي في توجيه الطلاب.",
+ "expEn": "The instructor's role in distance learning is no less important than in traditional education in guiding students."
+},
+{
+ "q": "Interaction between teachers and students consider one of the Principles of learning.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Learning",
+ "trQ": "التفاعل بين المعلمين والطلاب يعتبر من مبادئ التعلم.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "التفاعل هو مبدأ أساسي من مبادئ التعلم الفعال.",
+ "expEn": "Interaction is a fundamental principle of effective learning."
+},
+{
+ "q": "A good teacher should be a good leader and a good friend.",
+ "o": ["True", "False"],
+ "a": 0,
+ "topic": "Learning",
+ "trQ": "يجب أن يكون المعلم الجيد قائداً جيداً وصديقاً جيداً.",
+ "trO": ["صح", "خطأ"],
+ "expAr": "القيادة والود يبنيان علاقة قوية تسهل عملية التعلم.",
+ "expEn": "Leadership and friendliness build a strong relationship that facilitates the learning process."
+         }
+   ,
+ {
+  "q": "Which of the following isn't correct about the mass communication?",
+  "o": ["The educator can communicate with a large group at the same time", "The immediate effect can be easily evaluated", "Raise consciousness about health issues", "Change behavior"],
+  "a": 1,
+  "topic": "Communication",
+  "trQ": "أي مما يلي غير صحيح حول التواصل الجماهيري؟",
+  "trO": ["يمكن للمعلم التواصل مع مجموعة كبيرة في نفس الوقت", "يمكن تقييم التأثير الفوري بسهولة", "إثارة الوعي بالقضايا الصحية", "تغيير السلوك"],
+  "expAr": "من عيوب التواصل الجماهيري صعوبة تقييم التأثير الفوري بسهولة على عكس التواصل الفردي.",
+  "expEn": "A disadvantage of mass communication is the difficulty in easily evaluating the immediate effect, unlike interpersonal communication."
+ },
+ {
+  "q": "When sensitive topic is being discussed, the most suit method of communication is",
+  "o": ["Interpersonal communication", "Intrapersonal communication", "Mass communication", "All of the above"],
+  "a": 0,
+  "topic": "Communication",
+  "trQ": "عند مناقشة موضوع حساس، فإن الطريقة الأنسب للتواصل هي",
+  "trO": ["التواصل بين الأشخاص (الفردي)", "التواصل الداخلي", "التواصل الجماهيري", "كل ما سبق"],
+  "expAr": "المواضيع الحساسة تتطلب خصوصية وثقة، وهو ما يوفره التواصل الفردي (Interpersonal).",
+  "expEn": "Sensitive topics require privacy and trust, which interpersonal communication provides."
+ },
+ {
+  "q": "Health education for people attending market on a particular day this group called:",
+  "o": ["Informal groups", "Formal groups", "Group Dynamics", "Group Education"],
+  "a": 0,
+  "topic": "Group Dynamics",
+  "trQ": "التثقيف الصحي للأشخاص الذين يحضرون السوق في يوم معين تسمى هذه المجموعة:",
+  "trO": ["مجموعات غير رسمية", "مجموعات رسمية", "ديناميكيات المجموعة", "تعليم جماعي"],
+  "expAr": "هم أشخاص تجمعوا بشكل عشوائي وليس لديهم تنظيم أو قواعد مسبقة، لذا فهم مجموعة غير رسمية (Informal).",
+  "expEn": "They are people who gathered randomly without prior organization or rules, so they are an informal group."
+ },
+ {
+  "q": "............ is a group usually no special activity is planned by the people themselves.",
+  "o": ["Informal group", "Group dynamics", "Demonstration", "Formal group"],
+  "a": 0,
+  "topic": "Group Dynamics",
+  "trQ": "............ هي مجموعة عادة لا يخطط لها الأشخاص أنفسهم أي نشاط خاص.",
+  "trO": ["مجموعة غير رسمية", "ديناميكيات المجموعة", "عرض عملي", "مجموعة رسمية"],
+  "expAr": "المجموعة غير الرسمية لا تحتوي على أنشطة مخططة أو جداول زمنية.",
+  "expEn": "An informal group does not have planned activities or schedules."
+ },
+ {
+  "q": "This service should be given to patients at the health center, to pupils at school or during casual visits to community.",
+  "o": ["Home Visits", "Counseling", "Meetings", "Drama"],
+  "a": 1,
+  "topic": "Counseling",
+  "trQ": "يجب تقديم هذه الخدمة للمرضى في المركز الصحي، أو للتلاميذ في المدرسة، أو خلال الزيارات العارضة للمجتمع.",
+  "trO": ["الزيارات المنزلية", "الإرشاد", "الاجتماعات", "الدراما"],
+  "expAr": "الإرشاد (Counseling) يتم تقديمه في هذه الأماكن المختلفة للمساعدة في حل المشكلات.",
+  "expEn": "Counseling is provided in these various settings to help solve problems."
+ },
+ {
+  "q": "Groups that are well organized with some rules and regulations this is called:",
+  "o": ["Informal groups", "Formal groups", "Group Dynamics", "Group Education"],
+  "a": 1,
+  "topic": "Group Dynamics",
+  "trQ": "المجموعات المنظمة تنظيماً جيداً مع بعض القواعد واللوائح تسمى:",
+  "trO": ["مجموعات غير رسمية", "مجموعات رسمية", "ديناميكيات المجموعة", "تعليم جماعي"],
+  "expAr": "المجموعة الرسمية هي التي لديها هيكل وقواعد منظمة.",
+  "expEn": "A formal group has a structured organization and rules."
+ },
+ {
+  "q": "The enabling factors of health education don't include:",
+  "o": ["Personal knowledge", "Personal skills", "A transport method", "Infra structures"],
+  "a": 0,
+  "topic": "Behavior",
+  "trQ": "العوامل المُمكِّنة للتثقيف الصحي لا تشمل:",
+  "trO": ["المعرفة الشخصية", "المهارات الشخصية", "طريقة النقل", "البنية التحتية"],
+  "expAr": "المعرفة الشخصية هي عامل 'مهيئ' (Predisposing) وليس 'مُمكِّن' (Enabling). العوامل المُمكِّنة هي الموارد والمهارات.",
+  "expEn": "Personal knowledge is a 'predisposing' factor, not an 'enabling' one. Enabling factors are resources and skills."
+ },
+ {
+  "q": "A young female has family history of DM, which of the following is among health promotion acts for prevention?",
+  "o": ["Provide vaccination", "Provision of health education about nutrition", "Health education about high risk groups for HTN", "All of the above"],
+  "a": 1,
+  "topic": "Health Education",
+  "trQ": "أنثى شابة لديها تاريخ عائلي لمرض السكري، أي مما يلي يعد من إجراءات تعزيز الصحة للوقاية؟",
+  "trO": ["توفير التطعيم", "توفير التثقيف الصحي حول التغذية", "التثقيف الصحي حول مجموعات الخطر العالية لارتفاع ضغط الدم", "كل ما سبق"],
+  "expAr": "التغذية هي عامل أساسي في الوقاية من السكري. التطعيم لا يقي من السكري.",
+  "expEn": "Nutrition is a key factor in preventing diabetes. Vaccination does not prevent diabetes."
+ },
+ {
+  "q": "A state of social dysfunction is termed as",
+  "o": ["Infirmity", "Illness", "Disability", "Sickness"],
+  "a": 3,
+  "topic": "Concepts of Health",
+  "trQ": "حالة الخلل الوظيفي الاجتماعي تسمى",
+  "trO": ["الضعف", "المرض (Illness)", "الإعاقة", "الاعتلال (Sickness)"],
+  "expAr": "الاعتلال (Sickness) يشير إلى الجانب الاجتماعي للمرض وتأثيره على أدوار الفرد.",
+  "expEn": "Sickness refers to the social aspect of illness and its impact on an individual's roles."
+ },
+ {
+  "q": "............are the moral and ethical reasons of people's actions:",
+  "o": ["Attitudes", "Belief", "Values", "Knowledge"],
+  "a": 2,
+  "topic": "Behavior",
+  "trQ": "............ هي الأسباب الأخلاقية والمعنوية لأفعال الناس:",
+  "trO": ["المواقف", "المعتقدات", "القيم", "المعرفة"],
+  "expAr": "القيم (Values) هي المبادئ الأخلاقية والمعنوية التي توجه سلوك الإنسان.",
+  "expEn": "Values are the moral and ethical principles that guide human behavior."
+ },
+ {
+  "q": "Basic principles of health education include:",
+  "o": ["Participants don't involve in all stages", "Based on what you decide", "Permission of flow of communication", "Pumping all bulk of information in one exposure"],
+  "a": 2,
+  "topic": "Health Education",
+  "trQ": "المبادئ الأساسية للتثقيف الصحي تشمل:",
+  "trO": ["المشاركين لا يشاركون في جميع المراحل", "بناءً على ما تقرره أنت", "السماح بتدفق التواصل", "ضخ كل كمية المعلومات في تعرض واحد"],
+  "expAr": "التثقيف الصحي يتطلب تواصل فعال (Flow of communication). يجب إشراك المشاركين وتجنب حشو المعلومات.",
+  "expEn": "Health education requires effective communication flow. Participants must be involved and information overload avoided."
+ },
+ {
+  "q": "Mrs Mona came to family planning clinic to use family planning method; the nurse explained advantages and disadvantages of family planning method. This approach of health education is",
+  "o": ["Persuasion approach", "Indirective approach", "Informed decision making approach", "Obligatory approach"],
+  "a": 2,
+  "topic": "Health Education Approaches",
+  "trQ": "جاءت السيدة منى إلى عيادة تنظيم الأسرة لاستخدام وسيلة تنظيم الأسرة؛ أوضحت الممرضة مزايا وعيوب الوسيلة. هذا النهج في التثقيف الصحي هو",
+  "trO": ["نهج الإقناع", "النهج غير التوجيهي", "نهج اتخاذ القرار المستنير", "النهج الإلزامي"],
+  "expAr": "شرح المزايا والعيوب وترك القرار للمريضة هو نهج 'اتخاذ القرار المستنير'.",
+  "expEn": "Explaining pros and cons and leaving the decision to the patient is the 'informed decision-making' approach."
+ },
+ {
+  "q": "Mrs Mona health education activity is consider",
+  "o": ["Family education", "Individual education", "Group education", "Patient education"],
+  "a": 1,
+  "topic": "Educational Methods",
+  "trQ": "يعتبر نشاط التثقيف الصحي للسيدة منى:",
+  "trO": ["التعليم العائلي", "التعليم الفردي", "التعليم الجماعي", "تعليم المريض"],
+  "expAr": "تم تقديم التثقيف لشخص واحد فقط، لذا فهو تعليم فردي.",
+  "expEn": "The education was provided to only one person, so it is individual education."
+ },
+ {
+  "q": "The behavior of Mrs Mona is consider",
+  "o": ["Illness behavior", "Compliance behavior", "Rehabilitation behavior", "Utilization behavior"],
+  "a": 3,
+  "topic": "Behavior",
+  "trQ": "يعتبر سلوك السيدة منى:",
+  "trO": ["سلوك المرض", "سلوك الالتزام", "سلوك إعادة التأهيل", "سلوك الاستخدام (Utilization)"],
+  "expAr": "ذهابها للعيادة لاستخدام خدمة صحية يعتبر 'سلوك استخدام' الخدمات الصحية.",
+  "expEn": "Going to the clinic to use a health service is 'utilization behavior' of health services."
+ },
+ {
+  "q": "The prevention level of Mrs Mona problem is",
+  "o": ["Preparatory prevention", "Primary prevention", "Secondary prevention", "Tertiary prevention"],
+  "a": 1,
+  "topic": "Prevention",
+  "trQ": "مستوى الوقاية لمشكلة السيدة منى هو",
+  "trO": ["الوقاية التحضيرية", "الوقاية الأولية", "الوقاية الثانوية", "الوقاية الثلاثية"],
+  "expAr": "استخدام وسائل تنظيم الأسرة لمنع حدوث الحمل غير المرغوب فيه هو وقاية أولية.",
+  "expEn": "Using family planning methods to prevent unwanted pregnancy is primary prevention."
+ },
+ {
+  "q": "............ is a field of study concerned with scientific methods to take decisions and implement their programs to solve the problems.",
+  "o": ["Informal group", "Group dynamics", "Demonstration", "Formal group"],
+  "a": 1,
+  "topic": "Group Dynamics",
+  "trQ": "............ هو مجال دراسة يهتم بالأساليب العلمية لاتخاذ القرارات وتنفيذ برامجها لحل المشكلات.",
+  "trO": ["مجموعة غير رسمية", "ديناميكيات المجموعة (Group dynamics)", "عرض عملي", "مجموعة رسمية"],
+  "expAr": "ديناميكيات المجموعة تدرس التفاعلات والقوى داخل المجموعة.",
+  "expEn": "Group dynamics studies the interactions and forces within a group."
+ },
+ {
+  "q": "............ is a step-by step procedure that is performed in a group. They involve a mixture of theoretical teaching and practical work.",
+  "o": ["Informal group", "Group dynamics", "Demonstration", "Formal group"],
+  "a": 2,
+  "topic": "Educational Methods",
+  "trQ": "............ هو إجراء خطوة بخطوة يتم إجراؤه في مجموعة. يتضمن مزيجاً من التدريس النظري والعمل العملي.",
+  "trO": ["مجموعة غير رسمية", "ديناميكيات المجموعة", "عرض عملي (Demonstration)", "مجموعة رسمية"],
+  "expAr": "العروض العملية تتضمن خطوات نظرية وعملية.",
+  "expEn": "Demonstrations involve theoretical and practical steps."
+ },
+ {
+  "q": "It is a type of group educational methods and not requires money or equipment.",
+  "o": ["Informal group", "Group dynamics", "Stories", "Formal group"],
+  "a": 2,
+  "topic": "Educational Methods",
+  "trQ": "هو نوع من أساليب التعليم الجماعي ولا يتطلب المال أو المعدات.",
+  "trO": ["مجموعة غير رسمية", "ديناميكيات المجموعة", "القصص", "مجموعة رسمية"],
+  "expAr": "القصص (Stories) لا تحتاج إلى تكلفة أو أدوات، وهي وسيلة فعالة.",
+  "expEn": "Stories require no cost or tools and are an effective method."
+ },
+ {
+  "q": "This principle states that human being should treat other human being and distributing of resources fairly:",
+  "o": ["Non-maleficence", "Telling the truth", "Beneficence", "Justice"],
+  "a": 3,
+  "topic": "Ethics",
+  "trQ": "ينص هذا المبدأ على أن البشر يجب أن يعاملوا البشر الآخرين ويوزعوا الموارد بعدل:",
+  "trO": ["عدم الإضرار", "قول الحقيقة", "الإحسان", "العدالة (Justice)"],
+  "expAr": "العدالة تعني المعاملة العادلة وتوزيع الموارد بشكل منصف.",
+  "expEn": "Justice means fair treatment and fair distribution of resources."
+ },
+ {
+  "q": "....................is considers one of the evaluation steps that examine what resources used in the training program:",
+  "o": ["Output evaluation", "Impact evaluation", "Input evaluation", "Process evaluation"],
+  "a": 2,
+  "topic": "Evaluation",
+  "trQ": ".................... يعتبر من خطوات التقييم التي تفحص الموارد المستخدمة في البرنامج التدريبي:",
+  "trO": ["تقييم المخرجات", "تقييم الأثر", "تقييم المدخلات", "تقييم العملية"],
+  "expAr": "تقييم المدخلات (Input) يركز على الموارد (الوقت، المال، الموظفين).",
+  "expEn": "Input evaluation focuses on resources (time, money, staff)."
+ },
+ {
+  "q": ".................... means how message travels from a source to a receiver:",
+  "o": ["A u d i e n c e", "C h a n n e l", "F e d b a c k", "N o n e o f a b o v e"],
+  "a": 1,
+  "topic": "Communication",
+  "trQ": ".................... يعني كيف تنتقل الرسالة من المصدر إلى المستقبل:",
+  "trO": ["الجمهور", "القناة (Channel)", "التغذية الراجعة", "لا شيء مما سبق"],
+  "expAr": "القناة هي الوسيلة التي تنتقل عبرها الرسالة.",
+  "expEn": "The channel is the medium through which the message travels."
+ },
+ {
+  "q": ".................... is a refresher course given with a view of updating knowledge and skills.",
+  "o": ["Pre-service", "Orientation training", "In service training", "Training"],
+  "a": 2,
+  "topic": "Training",
+  "trQ": ".................... هي دورة تنشيطية تُعطى بغرض تحديث المعرفة والمهارات.",
+  "trO": ["قبل الخدمة", "التدريب التوجيهي", "التدريب أثناء الخدمة (In-service)", "التدريب"],
+  "expAr": "التدريب أثناء الخدمة يحدث للأشخاص العاملين بالفعل لتحديث معلوماتهم.",
+  "expEn": "In-service training occurs for people already working to update their knowledge."
+ },
+ {
+  "q": ".................... means doing good as well as preventing, removing and avoiding harm",
+  "o": ["Non-maleficence", "Justice", "Beneficence", "Telling the truth"],
+  "a": 2,
+  "topic": "Ethics",
+  "trQ": ".................... يعني فعل الخير وكذلك منع وإزالة وتجنب الأذى",
+  "trO": ["عدم الإضرار", "العدالة", "الإحسان (Beneficence)", "قول الحقيقة"],
+  "expAr": "الإحسان يشمل تقديم المنفعة وإزالة الضرر.",
+  "expEn": "Beneficence includes providing benefit and removing harm."
+ },
+ {
+  "q": "....................is the freedom of people to choose their own ways",
+  "o": ["Autonomy", "Justice", "Beneficence", "Telling the truth"],
+  "a": 0,
+  "topic": "Ethics",
+  "trQ": ".................... هي حرية الناس في اختيار طرقهم الخاصة",
+  "trO": ["الاستقلالية (Autonomy)", "العدالة", "الإحسان", "قول الحقيقة"],
+  "expAr": "الاستقلالية هي حق الفرد في اتخاذ قراراته بنفسه.",
+  "expEn": "Autonomy is the individual's right to make their own decisions."
+ },
+ {
+  "q": "....................refers to a preparation for the specific job to be performed in a particular position.",
+  "o": ["Pre-service", "Orientation training", "In service training", "Training"],
+  "a": 0,
+  "topic": "Training",
+  "trQ": ".................... يشير إلى الإعداد للوظيفة المحددة التي سيتم أداؤها في منصب معين.",
+  "trO": ["قبل الخدمة", "التدريب التوجيهي", "التدريب أثناء الخدمة", "التدريب"],
+  "expAr": "التدريب قبل الخدمة يؤهل الشخص قبل توليه الوظيفة.",
+  "expEn": "Pre-service training qualifies the person before taking up the job."
+ },
+ {
+  "q": ".................... is a process of determining the degree or amount of success with pre-determined objective.",
+  "o": ["Evaluation", "Assessment", "Planning", "Outcome"],
+  "a": 0,
+  "topic": "Evaluation",
+  "trQ": ".................... هو عملية تحديد درجة أو مقدار النجاح مع هدف محدد مسبقاً.",
+  "trO": ["التقييم (Evaluation)", "التقدير", "التخطيط", "النتيجة"],
+  "expAr": "التقييم يقيس مدى تحقيق الأهداف.",
+  "expEn": "Evaluation measures the extent to which objectives are achieved."
+ },
+ {
+  "q": "The last step of health education responsibilities is:",
+  "o": ["Planning effective program", "Implementing the program", "Evaluating program", "Replanning program"],
+  "a": 2,
+  "topic": "Health Education",
+  "trQ": "الخطوة الأخيرة من مسؤوليات التثقيف الصحي هي:",
+  "trO": ["تخطيط برنامج فعال", "تنفيذ البرنامج", "تقييم البرنامج", "إعادة تخطيط البرنامج"],
+  "expAr": "التقييم هو الخطوة النهائية لمعرفة مدى نجاح البرنامج قبل إعادة التخطيط.",
+  "expEn": "Evaluation is the final step to determine the program's success before replanning."
+ },
+ {
+  "q": "Mrs. Heba called her sister to investigate about appropriate nutrition for her infant. She told her a list of appropriate nutrition for this age. This approach of health education is",
+  "o": ["Persuasion approach", "Indirective approach", "Informed decision making approach", "Obligatory approach"],
+  "a": 1,
+  "topic": "Health Education Approaches",
+  "trQ": "اتصلت السيدة هبة بأختها للاستفسار عن التغذية المناسبة لطفلها. أخبرتها بقائمة التغذية المناسبة لهذا العمر. هذا النهج في التثقيف الصحي هو",
+  "trO": ["نهج الإقناع", "النهج غير التوجيهي (Indirective)", "نهج اتخاذ القرار المستنير", "النهج الإلزامي"],
+  "expAr": "الأخت طلبت المعلومة بنفسها، والتثقيف هنا استجابة لطلبها (غير مباشر).",
+  "expEn": "The sister requested the information herself, making the education responsive to her request (indirective)."
+ },
+ {
+  "q": "Mrs. Heba health education activity is consider",
+  "o": ["Family education", "Individual education", "Group education", "Patient education"],
+  "a": 0,
+  "topic": "Educational Methods",
+  "trQ": "يعتبر نشاط التثقيف الصحي للسيدة هبة:",
+  "trO": ["التعليم العائلي", "التعليم الفردي", "التعليم الجماعي", "تعليم المريض"],
+  "expAr": "التثقيف تم بين أفراد العائلة (الأخت لأختها) حول طفل.",
+  "expEn": "The education occurred between family members (sister to sister) about a child."
+ },
+ {
+  "q": "The behavior of Mrs. Heba is consider",
+  "o": ["Healthy behavior", "Compliance behavior", "Rehabilitation behavior", "Utilization behavior"],
+  "a": 0,
+  "topic": "Behavior",
+  "trQ": "يعتبر سلوك السيدة هبة:",
+  "trO": ["سلوك صحي", "سلوك الالتزام", "سلوك إعادة التأهيل", "سلوك الاستخدام"],
+  "expAr": "بحثها عن تغذية سليمة لطفلها هو سلوك صحي وقائي.",
+  "expEn": "Seeking proper nutrition for her child is a healthy, preventive behavior."
+ },
+ {
+  "q": "The prevention level of Mrs. Heba problem is",
+  "o": ["Preparatory prevention", "Primary prevention", "Secondary prevention", "Tertiary prevention"],
+  "a": 1,
+  "topic": "Prevention",
+  "trQ": "مستوى الوقاية لمشكلة السيدة هبة هو",
+  "trO": ["الوقاية التحضيرية", "الوقاية الأولية", "الوقاية الثانوية", "الوقاية الثلاثية"],
+  "expAr": "التغذية السليمة للرضع تهدف لمنع حدوث الأمراض (وقاية أولية).",
+  "expEn": "Proper infant nutrition aims to prevent diseases (primary prevention)."
+ },
+ {
+  "q": "During the oncology conference Dr. Amr called Dr. Jone to present an online lecture about new advances in management of ovarian cancer. The type of used technology in this situation is",
+  "o": ["Synchronous", "Asynchronous", "Continuous", "Acontinuous"],
+  "a": 0,
+  "topic": "Technology",
+  "trQ": "خلال مؤتمر الأورام، اتصل د. عمرو بـ د. جون لتقديم محاضرة عبر الإنترنت حول التطورات الجديدة في إدارة سرطان المبيض. نوع التكنولوجيا المستخدمة في هذه الحالة هو",
+  "trO": ["متزامن (Synchronous)", "غير متزامن", "مستمر", "غير مستمر"],
+  "expAr": "المحاضرة تُبث مباشرة في نفس الوقت للمشاركين، لذا فهي تكنولوجيا متزامنة.",
+  "expEn": "The lecture is broadcast live at the same time for participants, making it synchronous technology."
+ },
+ {
+  "q": "During the oncology conference Dr. Amr called Dr. Jone to present an online lecture about new advances in management of ovarian cancer. The mode of used technology in this situation is",
+  "o": ["Video-conference", "Web-conference", "Instructional television", "Internet radio"],
+  "a": 1,
+  "topic": "Technology",
+  "trQ": "خلال مؤتمر الأورام، اتصل د. عمرو بـ د. جون لتقديم محاضرة عبر الإنترنت... وضع التكنولوجيا المستخدمة في هذه الحالة هو",
+  "trO": ["مؤتمر فيديو", "مؤتمر ويب (Web-conference)", "تلفزيون تعليمي", "راديو إنترنت"],
+  "expAr": "استخدام الإنترنت للمحاضرة التفاعلية في مؤتمر يعتبر Web-conference.",
+  "expEn": "Using the internet for an interactive lecture in a conference is a web-conference."
+ },
+ {
+  "q": "Cambridge University facilitates an online electronic course about community nursing. Many students joint this course. The preferred type of used technology in this situation is",
+  "o": ["Synchronous", "Asynchronous", "Continuous", "Acontinuous"],
+  "a": 1,
+  "topic": "Technology",
+  "trQ": "تسهل جامعة كامبريدج دورة إلكترونية عبر الإنترنت حول التمريض المجتمعي. انضم العديد من الطلاب إلى هذه الدورة. النوع المفضل من التكنولوجيا المستخدمة في هذه الحالة هو",
+  "trO": ["متزامن", "غير متزامن (Asynchronous)", "مستمر", "غير مستمر"],
+  "expAr": "الدورات الإلكترونية المفتوحة عادةً ما تكون غير متزامنة ليتمكن الطلاب من التعلم في أي وقت.",
+  "expEn": "Online courses are usually asynchronous so students can learn at any time."
+ },
+ {
+  "q": "Cambridge University facilitates an online electronic course about community nursing. Many students joint this course. The type of learning in this situation is",
+  "o": ["Self-learning", "Group learning", "Continuous learning", "Distance learning"],
+  "a": 3,
+  "topic": "Technology",
+  "trQ": "تسهل جامعة كامبريدج دورة إلكترونية عبر الإنترنت... نوع التعلم في هذه الحالة هو",
+  "trO": ["التعلم الذاتي", "التعلم الجماعي", "التعلم المستمر", "التعلم عن بعد (Distance learning)"],
+  "expAr": "التعلم الإلكتروني عبر الإنترنت هو شكل من أشكال التعلم عن بعد.",
+  "expEn": "Online electronic learning is a form of distance learning."
+ },
+ {
+  "q": "Cambridge University facilitates an online electronic course about community nursing. Many students joint this course. The most common advantage in this situation is:",
+  "o": ["It makes students more excited to learn", "help students with busy schedules to work at home", "train students to learn new technology skills", "Decrease paper and photocopying costs"],
+  "a": 1,
+  "topic": "Technology",
+  "trQ": "تسهل جامعة كامبريدج دورة إلكترونية عبر الإنترنت... الميزة الأكثر شيوعاً في هذه الحالة هي:",
+  "trO": ["يجعل الطلاب أكثر حماساً للتعلم", "مساعدة الطلاب ذوي الجداول المزدحمة على العمل من المنزل", "تدريب الطلاب على تعلم مهارات تكنولوجية جديدة", "تقليل تكاليف الورق والتصوير"],
+  "expAr": "التعلم عن بعد يوفر المرونة للطلاب المشغولين للدراسة من المنزل.",
+  "expEn": "Distance learning provides flexibility for busy students to study from home."
+ },
+ {
+  "q": "Cambridge University facilitates an online electronic course about community nursing. Many students joint this course. The consumer's barrier in this situation is:",
+  "o": ["Increase cost of computers.", "Poor telecommunication infrastructure.", "Computer based system may be difficult to use.", "Limited access to the internet."],
+  "a": 2,
+  "topic": "Technology",
+  "trQ": "تسهل جامعة كامبريدج دورة إلكترونية عبر الإنترنت... عائق المستهلك في هذه الحالة هو:",
+  "trO": ["زيادة تكلفة أجهزة الكمبيوتر.", "ضعف البنية التحتية للاتصالات.", "قد يكون من الصعب استخدام النظام القائم على الكمبيوتر.", "محدودية الوصول إلى الإنترنت."],
+  "expAr": "عوائق المستهلك (Consumer barriers) تشمل صعوبة استخدام التكنولوجيا. الخيارات الأخرى هي عوائق بنية تحتية أو مالية.",
+  "expEn": "Consumer barriers include difficulty using technology. Other options are infrastructure or financial barriers."
+ },
+ {
+  "q": "Preserving human dignity, promoting patient equality, and providing freedom from suffering are ....................................................",
+  "o": ["Health literacy.", "Advocacy.", "Patient education.", "Behavior change communication."],
+  "a": 1,
+  "topic": "Ethics",
+  "trQ": "الحفاظ على كرامة الإنسان، وتعزيز مساواة المرضى، وتوفير التحرر من المعاناة هي ....................................................",
+  "trO": ["محو الأمية الصحية", "المناصرة (Advocacy)", "تعليم المريض", "التواصل لتغيير السلوك"],
+  "expAr": "المناصرة (Advocacy) تهدف للدفاع عن حقوق المرضى وكرامتهم وتوفير الرعاية العادلة.",
+  "expEn": "Advocacy aims to defend patients' rights, dignity, and provide fair care."
+ },
+ {
+  "q": "Mechanism of assessing the extent of degree of message arrival after communication is",
+  "o": ["A u d i e n c e", "C h a n n e l", "F e e d b a c k", "N o n e o f a b o v e"],
+  "a": 2,
+  "topic": "Communication",
+  "trQ": "آلية تقييم مدى درجة وصول الرسالة بعد التواصل هي",
+  "trO": ["الجمهور", "القناة", "التغذية الراجعة (Feedback)", "لا شيء مما سبق"],
+  "expAr": "التغذية الراجعة تخبر المرسل ما إذا كانت الرسالة قد وصلت وفُهمت.",
+  "expEn": "Feedback tells the sender whether the message was received and understood."
+ },
+ {
+  "q": "Predisposing factors for conducting a behavior are related to",
+  "o": ["Characteristics of a person or population", "Resources of a community", "Positive or negative influences", "Motivation influences"],
+  "a": 0,
+  "topic": "Behavior",
+  "trQ": "العوامل المهيئة لإجراء سلوك ما تتعلق بـ",
+  "trO": ["خصائص الشخص أو السكان", "موارد المجتمع", "تأثيرات إيجابية أو سلبية", "تأثيرات الدافع"],
+  "expAr": "العوامل المهيئة هي خصائص شخصية (مثل المعرفة والمواقف).",
+  "expEn": "Predisposing factors are personal characteristics (like knowledge and attitudes)."
+ },
+ {
+  "q": "Social mobilization is",
+  "o": ["A process of sharing ideas and experience among people.", "A working with opinion leaders and community based educational activities.", "A process of assist in the delivery of services and community involvement.", "A collection of useful briefs data."],
+  "a": 1,
+  "topic": "Health Education",
+  "trQ": "التعبئة الاجتماعية (Social mobilization) هي",
+  "trO": ["عملية تبادل الأفكار والخبرات بين الناس.", "العمل مع قادة الرأي والأنشطة التعليمية المجتمعية.", "عملية المساعدة في تقديم الخدمات والمشاركة المجتمعية.", "مجموعة من البيانات الموجزة المفيدة."],
+  "expAr": "التعبئة الاجتماعية تشمل إشراك قادة المجتمع والمجموعات لتحقيق أهداف صحية.",
+  "expEn": "Social mobilization involves engaging community leaders and groups to achieve health goals."
+ }
+];
+  
+let quiz = []; 
+let answers = []; 
+let i=0, score=0;
+let currentMode = 'study'; 
+let timerInterval;
+let isReviewMode = false;
+
+let soundEnabled = true;
+let vibrationEnabled = true;
+let autoAdvanceTimeout;
+let audioCtx = null; 
+
+const qDiv=document.getElementById("question"),
+      oDiv=document.getElementById("options"),
+      progressBar=document.getElementById("progressBar"),
+      progressText=document.getElementById("progressText"),
+      progressPercent=document.getElementById("progressPercent"),
+      midNav=document.getElementById("midNav"),
+      quizContainer=document.getElementById("quizContainer"),
+      startCard=document.getElementById("startCard"),
+      resultCard=document.getElementById("resultCard"),
+      scoreText=document.getElementById("scoreText"),
+      stickyNav=document.getElementById("stickyNav");
+
+function playAudioTone(type) {
+    if(!soundEnabled) return; 
+    try {
+        if (!audioCtx) { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+        if (audioCtx.state === 'suspended') { audioCtx.resume(); }
+
+        const oscillator = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        
+        if(type === 'correct') {
+            oscillator.frequency.setValueAtTime(523.25, audioCtx.currentTime); 
+            oscillator.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.08); 
+            gainNode.gain.setValueAtTime(0.15, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
+            oscillator.start(); oscillator.stop(audioCtx.currentTime + 0.25);
+        } else if(type === 'wrong') {
+            oscillator.type = 'sawtooth';
+            oscillator.frequency.setValueAtTime(140, audioCtx.currentTime);
+            gainNode.gain.setValueAtTime(0.15, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.35);
+            oscillator.start(); oscillator.stop(audioCtx.currentTime + 0.35);
+        } else if(type === 'click') {
+            oscillator.frequency.setValueAtTime(380, audioCtx.currentTime);
+            gainNode.gain.setValueAtTime(0.08, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.06);
+            oscillator.start(); oscillator.stop(audioCtx.currentTime + 0.06);
+        }
+    } catch(e) { console.log("Audio Context issue handled."); }
+}
+
+function triggerHaptic(type) {
+    if (!vibrationEnabled) return; 
+    if (navigator.vibrate) {
+        if (type === 'correct') navigator.vibrate(70);
+        else if (type === 'wrong') navigator.vibrate([100, 60, 100]);
+        else if (type === 'click') navigator.vibrate(35);
+    }
+}
+
+function toggleSound() {
+    soundEnabled = !soundEnabled;
+    document.getElementById("soundToggle").innerHTML = soundEnabled ? "<span>🔊</span> Sound On" : "<span>🔇</span> Sound Off";
+}
+
+function toggleVibration() {
+    vibrationEnabled = !vibrationEnabled;
+    document.getElementById("vibeToggle").innerHTML = vibrationEnabled ? "<span>📳</span> Vibe On" : "<span>📴</span> Vibe Off";
+    if (vibrationEnabled && navigator.vibrate) { navigator.vibrate(50); }
+}
+
+function setMode(mode) { currentMode = mode; showHighScore(); }
+
+function toggleTheme() {
+  const currentTheme = document.documentElement.getAttribute('data-theme');
+  const targetTheme = currentTheme === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', targetTheme);
+  document.querySelector('.theme-toggle').innerHTML = targetTheme === 'dark' ? '<span>☀️</span> Light Mode' : '<span>🌓</span> Dark Mode';
+}
+
+function prepareQuizData(shouldShuffle) {
+    quiz.forEach(q => {
+        q.combinedOptions = q.o.map((enText, idx) => ({
+            en: enText, ar: q.trO && q.trO[idx] ? q.trO[idx] : ""
+        }));
+    });
+    if(shouldShuffle) {
+        for (let currentIdx = quiz.length - 1; currentIdx > 0; currentIdx--) {
+            const randomIdx = Math.floor(Math.random() * (currentIdx + 1));
+            [quiz[currentIdx], quiz[randomIdx]] = [quiz[randomIdx], quiz[currentIdx]];
+        }
+        quiz.forEach(q => {
+            for (let j = q.combinedOptions.length - 1; j > 0; j--) {
+                const r = Math.floor(Math.random() * (j + 1));
+                [q.combinedOptions[j], q.combinedOptions[r]] = [q.combinedOptions[r], q.combinedOptions[j]];
+            }
+        });
+    }
+}
+
+function startTimer() {
+    clearInterval(timerInterval);
+    let totalSeconds = 60 * 60; 
+    const timerDisplay = document.getElementById("timerDisplay");
+    document.getElementById("timerBox").style.display = "block";
+    function refreshTimerView() {
+        let mins = Math.floor(totalSeconds / 60);
+        let secs = totalSeconds % 60;
+        timerDisplay.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    }
+    refreshTimerView();
+    timerInterval = setInterval(() => {
+        totalSeconds--;
+        if(totalSeconds <= 0) { clearInterval(timerInterval); showResult(); } else { refreshTimerView(); }
+    }, 1000);
+}
+
+function getFlaggedTexts() { return JSON.parse(localStorage.getItem("theCodingNurseW_strategies_flagged_questions") || "[]"); }
+
+function speakQuestion() {
+    if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel(); 
+        let structuredText = `Question number ${i + 1}: ${quiz[i].q}. `;
+        quiz[i].combinedOptions.forEach((opObj, idx) => { structuredText += `Choice number ${idx + 1}: ${opObj.en}. `; });
+        const utterance = new SpeechSynthesisUtterance(structuredText);
+        utterance.lang = 'en-US'; utterance.rate = 0.88; utterance.pitch = 1.0; 
+        utterance.onstart = () => {
+            const stopBtn = document.getElementById("stopSpeakBtn");
+            stopBtn.style.display = "inline-block"; stopBtn.innerHTML = "⏸️"; stopBtn.title = "إيقاف مؤقت للقرأة";
+        };
+        const resetAudioUI = () => { document.getElementById("stopSpeakBtn").style.display = "none"; };
+        utterance.onend = resetAudioUI; utterance.onerror = resetAudioUI;
+        window.speechSynthesis.speak(utterance);
+    } else { alert("⚠️ ميزة النطق الصوتي غير مدعومة على متصفحك الحالي."); }
+}
+
+function toggleSpeechPause() {
+    if ('speechSynthesis' in window) {
+        const stopBtn = document.getElementById("stopSpeakBtn");
+        if (window.speechSynthesis.speaking) {
+            if (window.speechSynthesis.paused) {
+                window.speechSynthesis.resume(); stopBtn.innerHTML = "⏸️"; stopBtn.title = "إيقاف مؤقت";
+            } else {
+                window.speechSynthesis.pause(); stopBtn.innerHTML = "▶️"; stopBtn.title = "استئناف النطق الحالي";
+            }
+        }
+    }
+}
+
+function forceStopSpeechEngine() {
+    if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const stopBtn = document.getElementById("stopSpeakBtn");
+        if (stopBtn) stopBtn.style.display = "none";
+    }
+}
+
+function toggleTranslation() {
+    const tBox = document.getElementById("translationBox");
+    tBox.style.display = (tBox.style.display === "block") ? "none" : "block";
+}
+
+function startQuiz() {
+    if (currentMode === 'bookmark') {
+        let flagged = getFlaggedTexts();
+        quiz = JSON.parse(JSON.stringify(originalQuiz)).filter(q => flagged.includes(q.q));
+        if (quiz.length === 0) { alert("❌ لا توجد أسئلة مميزة بـ 🔖 حالياً لمراجعتها!"); return; }
+        prepareQuizData(false);
+    } else if(!isReviewMode) {
+        quiz = JSON.parse(JSON.stringify(originalQuiz));
+        let doShuffle = (currentMode !== 'sequential');
+        prepareQuizData(doShuffle); 
+    }
+    localStorage.removeItem("theCodingNurseW_strategies_quiz_progress");
+    answers = new Array(quiz.length).fill(null);
+    midNav.innerHTML = "";
+    quiz.forEach((_, idx) => {
+      const b = document.createElement("button");
+      b.textContent = idx + 1; b.className = "q-btn";
+      b.onclick = () => { i = idx; load(); };
+      midNav.appendChild(b);
+    });
+
+    startCard.style.display = "none"; 
+    quizContainer.style.display = "block";
+    stickyNav.style.display = "block"; 
+    
+    if(currentMode === 'exam') { startTimer(); } else { document.getElementById("timerBox").style.display = "none"; }
+    load();
+}
+
+function updateMidNav(){
+  let flagged = getFlaggedTexts();
+  let answeredCount = 0;
+  document.querySelectorAll(".q-btn").forEach((el,idx)=>{
+    el.classList.remove("active","correct","wrong","answered-exam","flagged");
+    if(idx===i) el.classList.add("active");
+    if(quiz[idx] && flagged.includes(quiz[idx].q)) el.classList.add("flagged");
+    
+    if(quiz[idx] && quiz[idx].userPick !== undefined) {
+        answeredCount++;
+        if(currentMode === 'study' || currentMode === 'sequential' || currentMode === 'bookmark') {
+            if(answers[idx]===true) el.classList.add("correct");
+            if(answers[idx]===false) el.classList.add("wrong");
+        } else { el.classList.add("answered-exam"); }
+    }
+  });
+  
+  let pct = Math.round((answeredCount / quiz.length) * 100) || 0;
+  progressText.textContent = `${answeredCount} / ${quiz.length} Answered`;
+  progressPercent.textContent = `${pct}%`;
+  progressBar.style.width = pct + "%";
+}
+
+function toggleFlag() {
+    if(quiz[i]) {
+        let flagged = getFlaggedTexts();
+        const qText = quiz[i].q;
+        if(flagged.includes(qText)) { flagged = flagged.filter(t => t !== qText); quiz[i].isFlagged = false; }
+        else { flagged.push(qText); quiz[i].isFlagged = true; }
+        localStorage.setItem("theCodingNurseW_strategies_flagged_questions", JSON.stringify(flagged));
+        document.getElementById("flagBtn").classList.toggle("active", quiz[i].isFlagged);
+        updateMidNav(); saveProgress();
+    }
+}
+
+function renderExplain(){
+  const box=document.getElementById("explainBox");
+  const cur=quiz[i];
+  const reveal=(currentMode==='study'||currentMode==='sequential'||currentMode==='bookmark');
+  if(cur && cur.userPick!==undefined && reveal && (cur.expAr||cur.expEn)){
+    document.getElementById("exAr").textContent=cur.expAr||"";
+    document.getElementById("exEn").textContent=cur.expEn||"";
+    box.style.display="block";
+  } else { box.style.display="none"; }
+}
+
+function load(){
+  if(quiz.length === 0) return;
+  clearTimeout(autoAdvanceTimeout); forceStopSpeechEngine(); 
+  window.scrollTo(0,0); 
+  
+  const tBox = document.getElementById("translationBox"); tBox.style.display = "none";
+  const qCard = document.getElementById("quizCard");
+  qCard.style.animation = 'none'; qCard.offsetHeight; qCard.style.animation = 'popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
+
+  qDiv.textContent=quiz[i].q;
+  document.getElementById("topicTag").textContent=quiz[i].topic?("📌 "+quiz[i].topic):"";
+  qDiv.style.fontSize = quiz[i].q.length > 130 ? "16px" : "19px";
+  document.getElementById("qIndexBadge").textContent = `Q: ${i + 1} / ${quiz.length}`;
+  
+  const correctIdx = quiz[i].combinedOptions.findIndex(opt => opt.en === quiz[i].o[quiz[i].a]);
+  const transBtn = document.getElementById("translateBtn");
+  
+  if(quiz[i].trQ) {
+      transBtn.style.display = "inline-block";
+      document.getElementById("transQText").textContent = quiz[i].trQ;
+      const transOList = document.getElementById("transOList"); transOList.innerHTML = "";
+      quiz[i].combinedOptions.forEach(optObj => {
+          if(optObj.ar) { const li = document.createElement("li"); li.textContent = optObj.ar; transOList.appendChild(li); }
+      });
+  } else { transBtn.style.display = "none"; }
+  
+  let flagged = getFlaggedTexts();
+  quiz[i].isFlagged = flagged.includes(quiz[i].q);
+  document.getElementById("flagBtn").classList.toggle("active", !!quiz[i].isFlagged);
+  
+  oDiv.innerHTML="";
+  updateMidNav();
+  
+  quiz[i].combinedOptions.forEach((opObj,idx)=>{
+    const b=document.createElement("button");
+    b.textContent=opObj.en;
+    if(quiz[i].userPick !== undefined) {
+        b.disabled=true;
+        if(currentMode === 'study' || currentMode === 'sequential' || currentMode === 'bookmark') {
+            if(idx===correctIdx) b.classList.add("correct");
+            else if(idx === quiz[i].userPick) b.classList.add("wrong");
+        } else {
+            if(idx === quiz[i].userPick) b.classList.add("selected-exam");
+        }
+    }
+    b.onclick=()=>answer(idx,b);
+    oDiv.appendChild(b);
+  });
+}
+
+function answer(idx,btn){
+  if(quiz[i].userPick !== undefined) return;
+  quiz[i].userPick = idx;
+  document.querySelectorAll(".options button").forEach(b=>b.disabled=true);
+  
+  const correctIdx = quiz[i].combinedOptions.findIndex(opt => opt.en === quiz[i].o[quiz[i].a]);
+  
+  if(currentMode === 'study' || currentMode === 'sequential' || currentMode === 'bookmark') {
+      if(idx===correctIdx){
+        btn.classList.add("correct"); answers[i]=true; score++;
+        playAudioTone('correct'); triggerHaptic('correct');
+        autoAdvanceTimeout = setTimeout(() => { nextQ(); }, 4500);
+      }else{
+        btn.classList.add("wrong"); btn.classList.add("shake-anim"); 
+        oDiv.children[correctIdx].classList.add("correct"); answers[i]=false;
+        playAudioTone('wrong'); triggerHaptic('wrong');
+      }
+  } else {
+      btn.classList.add("selected-exam"); playAudioTone('click'); triggerHaptic('click');
+  }
+  renderExplain(); updateMidNav(); saveProgress();
+}
+
+function nextQ(){ if(i<quiz.length-1){i++;load()} else showResult(); }
+function prevQ(){ if(i>0){i--;load()} }
+
+function goToHome() {
+    clearInterval(timerInterval); forceStopSpeechEngine(); saveProgress(); 
+    quizContainer.style.display = "none"; stickyNav.style.display = "none"; startCard.style.display = "block";
+    checkSavedProgress(); showHighScore();
+}
+
+function saveProgress() {
+    if(isReviewMode) return; 
+    const dataToSave = { quiz: quiz, answers: answers, i: i, score: score, currentMode: currentMode };
+    localStorage.setItem("theCodingNurseW_strategies_quiz_progress", JSON.stringify(dataToSave));
+}
+
+function checkSavedProgress() {
+    const savedData = localStorage.getItem("theCodingNurseW_strategies_quiz_progress");
+    if(savedData && originalQuiz.length > 0) { document.getElementById("resumeBtn").style.display = "block"; }
+}
+
+function showHighScore() {
+    let modeKey = "theCodingNurseW_strategies_high_score_" + currentMode;
+    let highScore = localStorage.getItem(modeKey);
+    const hsView = document.getElementById("highScoreView");
+    
+    if(highScore !== null && originalQuiz.length > 0) {
+        let modeName = "";
+        if(currentMode === 'sequential') modeName = "(الترتيب)";
+        else if(currentMode === 'study') modeName = "(المذاكرة)";
+        else if(currentMode === 'exam') modeName = "(الامتحان)";
+        else if(currentMode === 'bookmark') modeName = "(المميزة)";
+        document.getElementById("highScoreVal").textContent = highScore + "% " + modeName;
+        hsView.style.display = "block";
+    } else { hsView.style.display = "none"; }
+}
+
+function resumeQuiz() {
+    const savedData = localStorage.getItem("theCodingNurseW_strategies_quiz_progress");
+    if(!savedData) return;
+    const parsedData = JSON.parse(savedData);
+    quiz = parsedData.quiz; answers = parsedData.answers; i = parsedData.i; score = parsedData.score; currentMode = parsedData.currentMode;
+    
+    document.querySelectorAll('input[name="quizMode"]').forEach(radio => { if(radio.value === currentMode) radio.checked = true; });
+    midNav.innerHTML = "";
+    quiz.forEach((_, idx) => {
+      const b = document.createElement("button"); b.textContent = idx + 1; b.className = "q-btn";
+      b.onclick = () => { i = idx; load(); }; midNav.appendChild(b);
+    });
+
+    startCard.style.display = "none"; quizContainer.style.display = "block"; stickyNav.style.display = "block";
+    if(currentMode === 'exam') { startTimer(); } else { document.getElementById("timerBox").style.display = "none"; }
+    load();
+}
+
+function showResult(){
+  clearInterval(timerInterval); forceStopSpeechEngine(); localStorage.removeItem("theCodingNurseW_strategies_quiz_progress"); 
+  document.getElementById("timerBox").style.display = "none";
+  quizContainer.style.display="none"; stickyNav.style.display = "none"; resultCard.style.display="block";
+  
+  if(currentMode === 'exam') {
+      score = 0;
+      quiz.forEach((q) => { 
+          const correctIdx = q.combinedOptions.findIndex(opt => opt.en === q.o[q.a]);
+          if(q.userPick === correctIdx) score++; 
+      });
+  }
+  
+  const wrongCount = quiz.length - score;
+  const accuracyRatio = Math.round((score / quiz.length) * 100) || 0;
+  
+  let modeKey = "theCodingNurseW_strategies_high_score_" + currentMode;
+  let savedHighScore = parseInt(localStorage.getItem(modeKey)) || 0;
+  if(accuracyRatio > savedHighScore) localStorage.setItem(modeKey, accuracyRatio);
+  
+  document.getElementById("statCorrect").textContent = score;
+  document.getElementById("statWrong").textContent = wrongCount;
+  document.getElementById("statRatio").textContent = accuracyRatio + "%";
+  scoreText.textContent=`${score} / ${quiz.length}`;
+  
+  const bTitle = document.getElementById("badgeTitle");
+  if(accuracyRatio >= 95) { bTitle.textContent = "👑 Master of Strategies"; bTitle.style.color = "#eab308"; } 
+  else if(accuracyRatio >= 80) { bTitle.textContent = "📝 Strategy Hero"; bTitle.style.color = "var(--primary)"; } 
+  else if(accuracyRatio >= 50) { bTitle.textContent = "💡 Smart Student"; bTitle.style.color = "var(--secondary)"; } 
+  else { bTitle.textContent = "💪 Keep Fighting, Future Champion"; bTitle.style.color = "var(--danger)"; }
+  
+  document.getElementById("reviewBtn").style.display = wrongCount > 0 ? "inline-block" : "none";
+  
+  if(score >= (quiz.length / 2) && quiz.length > 0) {
+    var duration = 4 * 1000; var end = Date.now() + duration;
+    (function frame() {
+      confetti({ particleCount: 4, angle: 60, spread: 55, origin: { x: 0, y: 0.7 } });
+      confetti({ particleCount: 4, angle: 120, spread: 55, origin: { x: 1, y: 0.7 } });
+      if (Date.now() < end) { requestAnimationFrame(frame); }
+    }());
+  }
+}
+
+function startReview() {
+    let wrongQuestions = quiz.filter(q => {
+        const correctIdx = q.combinedOptions.findIndex(opt => opt.en === q.o[q.a]);
+        return q.userPick !== correctIdx;
+    });
+    if(wrongQuestions.length === 0) return;
+    quiz = JSON.parse(JSON.stringify(wrongQuestions));
+    quiz.forEach(q => { delete q.userPick; delete q.isFlagged; }); 
+    isReviewMode = true; i = 0; score = 0;
+    prepareQuizData(false); resultCard.style.display = "none"; startQuiz();
+}
+
+function downloadResultCard() {
+    const dBtn = document.getElementById("downloadBtn");
+    const containerActionButtons = document.querySelector(".result-actions-container");
+    
+    dBtn.textContent = "⏳ Generating Image..."; dBtn.disabled = true;
+    containerActionButtons.style.display = "none"; 
+    
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+    const bgColor = currentTheme === 'dark' ? '#0f172a' : '#f1f5f9';
+    
+    html2canvas(document.querySelector(".container"), {
+        backgroundColor: bgColor, scale: 2, useCORS: true, allowTaint: true,
+        onclone: (clonedDoc) => {
+            clonedDoc.documentElement.setAttribute('data-theme', currentTheme);
+            const style = clonedDoc.createElement('style');
+            style.innerHTML = `* { transition: none !important; animation: none !important; }`;
+            clonedDoc.head.appendChild(style);
+        }
+    }).then(canvas => {
+        const downloadLink = document.createElement("a");
+        downloadLink.download = `TheCodingNurse_Strategies_Score.png`;
+        downloadLink.href = canvas.toDataURL("image/png");
+        downloadLink.click();
+        containerActionButtons.style.display = "flex";
+        dBtn.textContent = "📸 تحميل النتيجة كصورة"; dBtn.disabled = false;
+    }).catch(err => {
+        containerActionButtons.style.display = "flex";
+        dBtn.textContent = "📸 تحميل النتيجة كصورة"; dBtn.disabled = false;
+        alert("تعذر حفظ الصورة.");
+    });
+}
+
+function restartQuiz(){
+  i=0; score=0; isReviewMode = false; clearInterval(timerInterval);
+  forceStopSpeechEngine(); localStorage.removeItem("theCodingNurseW_strategies_quiz_progress");
+  document.getElementById("resumeBtn").style.display = "none";
+  resultCard.style.display="none"; startCard.style.display="block";
+  stickyNav.style.display="none";
+  checkSavedProgress(); showHighScore();
+}
+
+// Keyboard shortcuts
+document.addEventListener('keydown', function(e) {
+    if(quizContainer.style.display === 'none') return;
+    if(e.key === 'ArrowRight' || e.key === 'Enter') { nextQ(); }
+    else if(e.key === 'ArrowLeft') { prevQ(); }
+    else if(e.key === '1' || e.key === '2' || e.key === '3' || e.key === '4') {
+        const idx = parseInt(e.key) - 1;
+        const btns = document.querySelectorAll('.options button');
+        if(btns[idx] && !btns[idx].disabled) { btns[idx].click(); }
+    }
+});
+
+window.onload = function() { checkSavedProgress(); showHighScore(); };
+</script>
+</body>
+</html>
